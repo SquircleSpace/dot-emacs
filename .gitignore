@@ -1,0 +1,8 @@
+tramp
+auto-save-list
+
+# Complied files
+*.elc
+
+# Temporary files
+*~
