@@ -61,7 +61,7 @@
   (global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll 3 -1)))
 
   ;; Use aspell for spellchecking
-  (setq-default ispell-program-name "aspell"))
+  (setq-default ispell-program-name "hunspell"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org mode
@@ -150,11 +150,11 @@ the current directory in Python's search path."
   (setq explicit-shell-file-name "/bin/zsh")
 
   ;; Add matlab support
-  (add-to-list 'load-path "~/.emacs.d/mlab")
+  (add-to-list 'load-path "~/.emacs.d/elisp/mlab")
   (load-library "matlab-load")
 
   ;; Add CS70 Rubric support
-  (add-to-list 'load-path "~/.emacs.d/")
+  (add-to-list 'load-path "~/.emacs.d/elisp")
   (load "rubric.el")
   (add-to-list 'auto-mode-alist '("Rubric\.\*\\.txt" . rubric-mode))
 

@@ -4,9 +4,14 @@
 ; Known Bugs:
 ;   font-lock does not play nicely with multi-line regexes, so
 ;   editting a section will break its color.
-(defvar check-grades-path "~/bin/check-grades")
-(defvar style-check-path "~/bin/style-check")
-(defvar comments-path "~/summer12/tools/graderComments.txt")
+(defcustom cs70-prefix "~/.emacs.d/cs70-tools" "Fun!")
+
+(defun check-grades-path ()
+  (concat cs70-prefix "/bin/check-grades"))
+(defun style-check-path ()
+  (concat cs70-prefix "/bin/style-check"))
+(defun comments-path ()
+  (concat cs70-prefix "/graderComments.txt"))
 (defvar given-folder "given/")
 (defvar section-re "^\\(\\([A-Za-z0-9 ]*\\)[:.] *Total *= *\\)[^ ]*\\( +/ *[0-9]+\\)")
 
@@ -89,20 +94,20 @@
 ; Call check-grades to get score for a section.
 ; YOU NEED TO SAVE BEFORE THIS WORKS.
 (defun rubric-check-grades-section (section)
-  (shell-command-to-string (concat check-grades-path " -f=Rubric.txt -g " section)))
+  (shell-command-to-string (concat (check-grades-path) " -f=Rubric.txt -g " section)))
 
 ; Dumps results of check-grades into a buffer.
 ; Again, NEED TO SAVE BEFORE USING THIS
 (defun rubric-check-grades ()
   (interactive)
-  (call-process check-grades-path nil "check-grades.out" t "-f=./Rubric.txt")
+  (call-process (check-grades-path) (current-buffer) "check-grades.out" t)
   (display-buffer "check-grades.out" t)
 )
 
 ; Gets the combined score via check-grades
 ; AS USUAL, SAVE BEFORE THIS
 (defun rubric-check-grades-calc ()
-  (shell-command-to-string (concat check-grades-path " -c -f=Rubric.txt"))
+  (shell-command-to-string (concat (check-grades-path) " -c -f=Rubric.txt"))
 )
 
 ; NEED TO SAVE BEFORE USING THIS.
@@ -128,14 +133,14 @@
 ; want, as its pretty unambiguous.
 (defun rubric-grader-comment ()
   (interactive)
-  (find-file-other-window comments-path))
+  (find-file-other-window (comments-path)))
 
 ; Dumps style-check output into another window.
 ; WARNING: I don't think this will work for HW1 because it looks at
 ; only the current folder by default.
 (defun rubric-style-check ()
   (interactive)
-  (call-process style-check-path nil "style-check.out" t)
+  (call-process (style-check-path) nil "style-check.out" t)
   (display-buffer "style-check.out" t)
 )
 
