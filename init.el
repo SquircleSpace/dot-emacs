@@ -74,10 +74,8 @@
 
   ;; Use org-mode 7.7
   (add-to-list 'load-path
-	       (expand-file-name "/opt/local/share/emacs/site-lisp"))
-  (add-to-list 'load-path
-	       (expand-file-name "/opt/local/emacs/site-lisp"))
-  (require 'org-install)
+               (expand-file-name "~/.emacs.d/elisp/org-mode/lisp"))
+  (require 'org)
   (require 'org-latex)
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 
