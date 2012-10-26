@@ -142,6 +142,17 @@ the current directory in Python's search path."
 	    'whitespace-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Haskell
+
+(defun set-haskell-options ()
+  (load "~/.emacs.d/elisp/haskell-mode/haskell-site-file")
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+  (add-hook 'haskell-mode-hook 'font-lock-mode)
+  (add-hook 'haskell-mode-hook 'imenu-add-menubar-index)
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc
 
 (defun set-other-options ()
@@ -178,6 +189,8 @@ the current directory in Python's search path."
   (set-global-options)
   (set-org-mode-options)
   (set-python-options)
-  (set-other-options))
+  (set-haskell-options)
+  (set-other-options)
+  )
 
 (set-all-options)
