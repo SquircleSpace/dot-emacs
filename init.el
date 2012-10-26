@@ -165,8 +165,7 @@ the current directory in Python's search path."
   (load-library "matlab-load")
 
   ;; Add CS70 Rubric support
-  (add-to-list 'load-path "~/.emacs.d/elisp")
-  (load "rubric.el")
+  (load "~/.emacs.d/elisp/rubric.el")
   (add-to-list 'auto-mode-alist '("Rubric\.\*\\.txt" . rubric-mode))
 
   ;; Set C++ style
