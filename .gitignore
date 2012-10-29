@@ -6,3 +6,6 @@ auto-save-list
 
 # Temporary files
 *~
+
+# machine config
+machine.el

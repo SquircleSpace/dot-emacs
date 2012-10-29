@@ -187,6 +187,14 @@ current directory in Python's search path."
 
   )
 
+(defun set-machine-options ()
+  
+  ;; Check if the extra elisp file exists
+  (if (file-exists-p "~/.emacs.d/machine.el")
+      (load "~/.emacs.d/machine.el")
+    )
+  )
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Apply options
 
@@ -205,6 +213,9 @@ current directory in Python's search path."
   (set-haskell-options)
   (set-matlab-options)
   (set-c++-options)
+
+  ;; Load machine specific options
+  (set-machine-options)
   )
 
 (set-all-options)
