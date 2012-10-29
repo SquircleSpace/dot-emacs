@@ -1,0 +1,395 @@
+#! /usr/bin/perl -w
+#
+# check-grades
+# By Rai Feren <rferen@cs.hmc.edu>
+# 
+# Checks that everyone's rubrics are done correctly.
+#
+# Call within a specific grading folder (e.g., summer12/grading/hw1)
+#   to get everyone's assignment for that week.
+# Or call with `-f filepath/to/Rubric.txt maybe/another/Rubric.txt` to
+#   grade only a few.
+# Use -c if you care what the final score is, as it'll output just the
+#   combined score to stdout (...or at least, it should). This is
+#   intended to be used when called by some other program (e.g., emacs
+#   rubric-mode)
+# Use -s to get ONLY the combined score printed out. This is intended
+#   for emacs to print out stuff nicely.
+
+
+# For pretty printing of hashes.
+use Data::Dumper;
+
+# Handle options
+use Getopt::Long;
+local ($debug, @files, $calc, $stats,$catGrading);
+GetOptions( 'd|debug|v|verbose' => \$debug, 
+	    'f|files=s@{1,}' => \@files,
+	    'c|calc' => \$calc,
+	    's|stats' => \$stats,
+            'g|grade|category=s' => \$catGrading);
+
+local $silentErrors = ($debug ? 0 : ($calc || $catGrading));
+
+# pattern for matching numbers
+my $nm = qr/(?:\d+(?:\.\d+)?)/;
+# pattern for getting Section names
+my $secPattern = qr/(\w+(?: \w+)?|SELF ASSESSMENT)/;
+
+# Helper for written answers.  part_id matches things like 1cii-iv.
+my $roman = qr/(?>(?:i|ii|iii|iv|v|vi|vii|viii|ix|x)(?![ivx]))/;
+my $debug_part = qr/(?:(?i)printing|assert|gdb|valgrind|review)/;
+my $part_id = qr/(?:(?:(?:$nm\s+$debug_part)|
+    (?:\b(?:\d+|$debug_part)\.\d+\b)|
+    (?:\b(?:W?\d+\(?(?:[a-z]$roman?)?)|
+    (?:\(?[a-z]\)?(\(?(?:$roman)\)?)?))(?:-(?:[a-z]|$roman))?(?!\w))\)?)/x;
+
+
+# %scores maps categories to scores.
+# IE: $scores{"SUBMISSION"} = 6;
+# Used to see if final grade is reasonable.
+my %scores;
+# %score_percents maps categories to percents.
+# IE: $scores{"SUBMISSION"} = 0.6;
+my %score_percents;
+
+# %sec_scores maps sections to scores.
+# IE: $sec_scores{"STYLE: LAYOUT"} = 2.
+# Used to assert that category totals are correct.
+my %sec_scores;
+
+# $running holds count currently seen for a given category.
+my $running = 0;
+
+# $category and $section hold strings with the last seen values of each.
+my $category = 0;
+my $section = 0;
+my $sec = 0; # Use to identify when we're in a section.
+my $cur_parse = 0; # Use on parsing multiple line part declarations.
+my $parsing = 0;
+my $cur_score = 0;
+
+# Use to get combined score.
+my $score = 0;
+my $calc_combined = 0;
+my $consistency_bonus = 0;
+my $error = 0;
+
+# Use for -s flag. Needs to be constant across many rubrics.
+my %stat_dict; 
+# Use to tell return-hw when its okay to return stuff.
+my $err = 0;
+
+
+# Use these to print any information useful for debugging the script. 
+sub debug_print {
+    if ($debug && not $silentErrors) {
+        print @_;
+    }
+}
+sub calc_print {
+    if ($calc || $debug) {
+	print @_;
+    }
+}
+sub error_print{
+    if (not $silentErrors) {
+        print STDERR @_;       
+    }
+    $error++;
+}
+
+# Places statistics into a global dictionary for help with metareviewing.
+#   IE: stat_store($section, $score);
+# Optional last argument says how many times to increment score by.
+sub stat_store {
+    if (not $_[2]) {
+	$_[2] = 1;
+    }
+    if ($stats) {
+	$stat_dict{$_[0]}{$_[1]} += $_[2];
+    }
+}
+
+# Get the raw scores from categories
+sub raw_scores(){
+    if (/($secPattern).+Total =\s*($nm)?\s*\/\s*($nm)/) { # Match a Total specification
+	# When we see a new category, its time to check that the old category
+	# was sensible.
+	if ($category){ 
+            if ($scores{$category} && $scores{$category} != $running) { 
+                error_print 
+                    "ERROR: $scores{$category} reported in $category "
+                    . "when expected $running.\n";
+            } elsif (not $scores{$category}) {
+                error_print "ERROR: No score reported for $category\n";
+            }
+	}
+        if ($category ~~ $catGrading) {
+            print $running; die; # You're done, hurrah.
+        }
+
+	$category = $1;
+	$scores{$1} = $3;
+	$running = 0;
+        if ($category =~ /SELF ASSESSMENT/i) {
+            $section = "SELF ASSESSMENT:SELF-ASSESS";
+            if ($catGrading ~~ $category) {
+                print $running; die;
+            }
+        }
+
+    } elsif (/^\s*\+?($nm)\)/) { # Seeing a score. Record it!
+	$cur_score = $1;
+        if (/\[Per Part:\s*(.+)/) { # Multiple parts!
+	    debug_print "Start multi line parse";
+            $parsing = 1;
+        } else {
+	    increment($section,$cur_score);
+	}
+
+    } elsif (/----+/) { # Defining a new section
+	$sec = not $sec;
+    } elsif ($sec) { # Grab the section's name while you still can!
+	chomp(); # TODO: Is this redundant? Whoops, should check that.
+	$section = "$category: $_";
+    } 
+    if ($parsing) {
+        $cur_parse .= $_;
+        if ($cur_parse =~ /\[Per Part:\s*(.+)\]/sm) { # Multiple parts!
+	    debug_print "Seeing parts for $cur_score points: $1\n";
+	    my $parts = $1;
+	    while ($parts =~ /($part_id)/g) {
+		my $part_count = part_count($1);
+		# TODO: This bit makes -s work incorrectly for written!
+		#       Need a better plan for that.
+		increment($section, $part_count*$cur_score); 
+	    }
+            $parsing = 0; $cur_parse = "";
+	}
+        
+    }
+    
+
+}	
+
+
+# Updates scores for a particular student.
+#   Usage: increment($section,$value);
+sub increment {
+    $running += $_[1];
+    $sec_scores{$_[0]} += $_[1];
+    stat_store($_[0],$_[1]);
+    debug_print "Incrementing $_[0] by $_[1]\n";
+}
+
+
+# TODO: Look into the printing/valgrind stuff on HW3 and determine if this is
+#       best way to do this. If not, then change this function and some of the globals.
+sub part_count {
+    my $part = $_[0];
+
+    # hash for converting roman numerals to integers.
+    # (TODO: There ought to be a package somewhere that does this)
+    my %roman_to_number = (
+	"i"=>1, "ii"=>2, "iii"=>3, "iv"=>4, "v"=>5,
+        "vi"=>6, "vii"=>7, "viii"=>8, "ix"=>9, "x"=>10
+	);
+
+    if($part =~ m/^.*?(?:($roman)-($roman)|([a-z])-([a-z]))$/) {
+        if($1) {
+            # Remember to add 1 to the difference, because we're using
+            # a closed range.
+            return $roman_to_number{$2} - $roman_to_number{$1} + 1;
+	} else {
+            return ord($4) - ord($3) + 1;
+        }
+    } elsif($part =~ m/^($nm)\s+(?:printing|assert|gdb|valgrind|review)$/i) {
+        return $1;
+    } else {
+        return 1;
+    }
+}
+
+
+sub final_scores(){
+    # Look for their final scores
+    if (/($secPattern)\s*=\s*($nm)\s*\/\s*($nm)/){
+        my $category = $1;
+	my $old_score = find_score($1);
+	
+	if ($old_score && $old_score != $3) {
+            error_print
+                "ERROR: $3 reported in $1 in 'Your Scores' "
+		. "when previously wrote $old_score\n";
+	}
+	$score_percents{$category} = ($3/$4);
+    }
+}
+
+
+sub combined_calc(){
+    # Use on lines like "+ 0.20 * (Style * 25.6)"
+    if (/($nm) \* ($secPattern)/){
+	my $percentage = $1;
+        debug_print "$2 is worth $1 of total\n";
+	if ($2 !~ /consistency/i) {
+	    my $raw = find_percent($2);
+            debug_print $raw . "!";
+	    
+	    $calc_combined += $percentage*$raw;
+            if ($2 !~ /self assessment/i){
+                $consistency_bonus = ($consistency_bonus <= $raw ? 
+                                      $consistency_bonus : $raw);
+                debug_print "After $2, CONSISTENCY BONUS: $consistency_bonus\n";
+            } else {
+                debug_print "Ignored Self-Assessment\n";
+            }
+	} else {
+	    debug_print "CONSISTENCY BONUS: $consistency_bonus\n";
+	    $calc_combined += $percentage*$consistency_bonus;
+	}
+    } elsif (/\+ ($nm) @/) {
+	$calc_combined += $1;
+    }
+}
+
+
+# Gets a score for a given section.
+# IE: $old_score = find_score($category);
+sub find_score(){
+    # While this looks inefficient, very few keys to look through
+    # and allows for case insensitivity, which is nice.
+    foreach $k(keys %scores){
+	if ($k =~ /$_[0]/i){
+	    return $scores{$k};
+	}
+    }
+}
+# Gets a percent for a given section.
+# IE: $percent = find_percent($category);
+sub find_percent(){
+    # While this looks inefficient, very few keys to look through
+    # and allows for case insensitivity, which is nice.
+    foreach $k(keys %score_percents){
+	if ($k =~ /$_[0]/i){
+	    return $score_percents{$k};
+	}
+    }
+}
+
+sub cat_grade_print() {
+    foreach $k(keys %scores){
+        if ($k =~ /$catGrading/i){
+            print $scores{$k};
+        }
+    }
+}
+
+# Uses Data::Dumper to pretty_print the two important dictionaries.
+# TODO: Uh this needs a better name, 'cause whoops.
+sub pretty_print() {
+
+    $Data::Dumper::Sortkeys = 1;
+    $Data::Dumper::Varname = 'Category Scores ';
+    debug_print Dumper(\%score_percents);
+    $Data::Dumper::Varname = 'Section Scores ';
+    debug_print Dumper(\%sec_scores);
+}
+
+# checks a single rubric
+sub check_rubric() {
+    open RUBRIC, $file or die $!;
+    
+    # Reset all variables
+    %scores = ();
+    %score_percents = ();
+    %sec_scores = ();
+    $running = 0;
+    $category = 0;
+    $section = 0;
+    $sec = 0;
+    $score = 0;
+    $calc_combined = 0;
+    $error = 0;
+
+    # The $consistency_bonus is set really high because it will go to the
+    # lowest section score seen. Would be preferable to use NULL as
+    # default, but since that's the same in perl as 0 and we WANT 0 to be
+    # a possible consistency_bonus, this is a bad idea.
+    $consistency_bonus = 9000;
+
+    my $done = 0;
+    my $combined = 0;
+    eval{ # Allow errors to come up within a rubric.
+	while (<RUBRIC>){
+	    chomp;
+	    if (/^COMBINED SCORE:/) {
+		$done = 1;
+		if (/($nm)/){
+		    $score = $1;
+		}
+		debug_print "Done with score parsing and saw score of $score\n";
+	    }
+	    
+	    if (not $done) {
+		raw_scores();
+	    } elsif (/^WHERE/) {
+		$combined = 1;
+                if ($catGrading){
+                    cat_grade_print();
+                    return;
+                }
+		combined_calc();
+	    } elsif ($combined) {
+		combined_calc();
+	    } else {
+		final_scores();
+	    }
+	}
+
+	$calc_combined = sprintf("%.2f",$calc_combined);
+	pretty_print();
+
+	debug_print "\nCalculated Combined Score of $calc_combined.\n\n";
+        calc_print "$calc_combined";
+	# Final scores should be first in the statistics printing, so put a space for 
+	# sorting purposes.
+	$stat_dict{" COMBINED"}{$calc_combined} += 1;
+
+	if (($calc_combined != $score) && (not $calc)) {
+            error_print 
+                "ERROR: Final score of $score reported "
+		. "when $calc_combined expected."
+		. "\n\n";
+	} elsif (not ($error || $silentErrors)) {
+	    print "Valid Scores.\n\n";
+	}
+        if ($error && (not $silentErrors)) {
+            print "Found $error errors.\n\n";
+            $err = 1;
+        }
+    };
+    if ($@){ 
+        error_print "ERROR: $@\n\n";
+    }
+}
+
+
+# Run the script on rubrics.
+if (not @files) {
+    @files = <*.*/Rubric.txt>; # Get everyone's if none specified
+}
+foreach $file(@files){
+    if (not $silentErrors) {
+        print "$file\n============================\n";
+    }
+    check_rubric();
+}
+if ($stats){
+    $Data::Dumper::Sortkeys = 1;
+    $Data::Dumper::Varname = 'Statistics ';
+    print Dumper(\%stat_dict);
+}
+
+exit $err

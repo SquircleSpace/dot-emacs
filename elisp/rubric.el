@@ -4,7 +4,7 @@
 ; Known Bugs:
 ;   font-lock does not play nicely with multi-line regexes, so
 ;   editting a section will break its color.
-(defcustom cs70-prefix "~/.emacs.d/cs70-tools" "Fun!")
+(defcustom cs70-prefix "~/.emacs.d/cs70-tools" "Where the CS70 tools live")
 
 (defun check-grades-path ()
   (concat cs70-prefix "/bin/check-grades"))
@@ -91,24 +91,51 @@
                     start-your-scores score end-your-scores)))
   (message (format "Changing %s to %s" section score)))
 
+(defun rubric-buffer-to-file ()
+  (let
+      (
+       (in-text (buffer-string))
+       (in-file (make-temp-file "rubric"))
+       )
+    (with-temp-file in-file (insert in-text))
+    in-file
+    )
+  )
+
 ; Call check-grades to get score for a section.
 ; YOU NEED TO SAVE BEFORE THIS WORKS.
 (defun rubric-check-grades-section (section)
-  (shell-command-to-string (concat (check-grades-path) " -f=Rubric.txt -g " section)))
+  (let
+      ((in-file (rubric-buffer-to-file)))
+    (with-temp-buffer
+      (call-process (check-grades-path) in-file t nil "-f" "-" "-g" section)
+      (buffer-string)
+      )
+    )
+  )
 
 ; Dumps results of check-grades into a buffer.
 ; Again, NEED TO SAVE BEFORE USING THIS
 (defun rubric-check-grades ()
   (interactive)
-  (call-process (check-grades-path) (current-buffer) "check-grades.out" t)
-  (display-buffer "check-grades.out" t)
-)
+  (let
+      ((in-file (rubric-buffer-to-file)))
+    (call-process (check-grades-path) in-file "check-grades.out" t "-f" "-")
+    (display-buffer "check-grades.out" t)
+    )
+  )
 
 ; Gets the combined score via check-grades
 ; AS USUAL, SAVE BEFORE THIS
 (defun rubric-check-grades-calc ()
-  (shell-command-to-string (concat (check-grades-path) " -c -f=Rubric.txt"))
-)
+  (let
+      ((in-file (rubric-buffer-to-file)))
+    (with-temp-buffer
+      (call-process (check-grades-path) in-file t nil "-c" "-f" "-")
+      (buffer-string)
+      )
+    )
+  )
 
 ; NEED TO SAVE BEFORE USING THIS.
 ; Sets the following line:
@@ -184,7 +211,8 @@
   (setq font-lock-defaults rubric-font-lock-defaults)
   (auto-fill-mode)
   (set-fill-column 79)
-;  (set-fill-prefix "\|") ; RAI: This just seems to throw errors... O_o
+  (setq adaptive-fill-function (lambda () "|         "))
+  (run-hooks 'rubric-mode-hook)
   )
 
 (define-key rubric-mode-map (kbd "C-c q") 'rubric-man-set-section-score)

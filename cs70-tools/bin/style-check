@@ -1,0 +1,264 @@
+#! /usr/bin/perl
+#
+# style-check
+# By Rai Feren <rferen@cs.hmc.edu>
+#
+# This current version is intended to be ran on header files.
+# i.e.:
+# 
+#     style-check *.*pp > style.out
+#
+# style-check has two "modes". Header Mode and Implementation
+# Mode. These modes run different tests, based on what type of file is
+# used.
+#
+# Header Mode works on *.hpp files, but will ignore *[-_]private.hpp
+# files. Use that format if you want something like an implementation
+# of a template.
+#
+# Implemenation Mode works on *.cpp or *[-_]private.hpp files.
+#
+# style-check will ignore any other files (notably *.[ch]) because it
+# is intended only for CS 70 C++ style checking. Anything else is out
+# of the scope of this program.
+#
+# style-check will identify:
+#   Code found before an #include guard in header file. 
+#     (Useful to tell if they were forgotten)
+#   Code found after  an #include guard in header file.
+#   using directives written in header file.
+#   #define used in implemetation file.
+#   goto used in implementation file (but not in header as
+#     implementations should NOT be in there)
+#   `this` being used outside of `return` statements. It means STL
+#     functions using the `this` pointer get found, but it at least
+#     prints the line to go "Are you sure this is bad?"
+#   Use of (*variable).stuff. This actually gets caught on stuff like
+#     const_cast, and thus we print out the line to confirm if its a
+#     problem.
+#   Where destructor, copy constructor, and assignment operator are
+#     defined (i.e., public vs private). If they aren't defined, it
+#     won't print their presence and the grader should know
+#     something's up.
+#
+
+use Getopt::Long;
+local $debug;
+GetOptions( 'd|debug|v|verbose' => \$debug);
+
+my $output;
+my %warnings;
+
+if (not @ARGV) {
+    @ARGV = <*.hpp>;
+}
+foreach $file(@ARGV) {
+    $output = "";
+    check_header();
+    check_implementation();
+    if ($output) {
+        print "$file:\n$output\n";
+    }
+}
+
+
+sub debug_print {
+    if ($debug) {
+        print STDERR @_;
+    }
+}
+
+
+# Returns a string that has no commented out stuff in it.
+# Will adjust $lcomment to keep track of whether in a block comment or not.
+sub is_comment {
+    if (/(.*)\/\*/) { # Block comment syntax
+        $lcomment = 1;
+        return ($1 || " ");
+    } elsif (/\*\/(.*)/) { # Ending a block comment
+        $lcomment = 0;
+        return ($1 || " ");
+    }
+
+    if (/(.*)\/\/\/?/){ # Single line
+        return ($1 || " ");
+    } elsif ($lcomment) { # continued block comment
+        return " ";
+    } else { # No comments involved here. Cool.
+        return 0;
+    }
+}    
+
+
+# Looks for code before and after #include guards.
+# Keeps track of how many #ifs and #endifs there were to check this.
+sub includeGuardCheck {
+    if ($_[0] == 0) {
+        if (/\#ifndef (\w+)/i) {
+            debug_print "Found #include guard of $1 at line $.\n";
+            $preprocessorNest++;
+            return 1;
+        } elsif (/\#if/i) {
+            $preprocessorNest++;
+        }
+        
+        if (/\S/) {
+            if (not $warnings{'guard'}) {
+                $output .= "Code found before #include guard.\n\t Line: $.\n\t\t$_\n";
+                $warings{'guard'} = 1;
+            }
+            debug_print "Bad pre-guard line: $_\n";
+        }
+        return 0;
+    } elsif ($_[0] == 1) {
+        if (/\#endif/i){
+            $preprocessorNest--;
+            debug_print "Preprocessor nesting is $preprocessorNest at line $.\n";
+            return (not $preProcessorNest && 2) || 1;
+        } elsif (/\#if/i) {
+            $preprocessorNest++;
+        } 
+        return 1;
+
+    } elsif ($_[0] == 2) {
+        if (/\S/) {
+            $output .= "Code found after #include guard.\n\t Line: $.\n";
+            debug_print "Bad post-guard line: $_\n";
+        }
+        return 2;
+    }
+}
+
+
+# Gets where copy constructor/destructor/assignment operator are defined.
+# Will do this for nested classes too.
+# I THINK this'll break if you have a private class with a public part... Hm.
+
+# And by break, I mean "If you declare a constructor after a private
+# class with a public definition, style-check will think your
+# constructor is public despite it being private." However, the main
+# use of this is a "Did people even define their operators", and so it
+# works reliably for that.
+sub constructor_check() {
+    if (/^\s*(?:class|struct)\s+(\w+)/){
+        debug_print "Found a class, $1\n";
+        push(@classes, $1);
+    } elsif (/};/) {
+        debug_print "Ending class, $classes[$#classes]\n";
+        pop @classes;
+    } elsif (/^\s*(?:private|protected):/) {
+        $scope = 0;
+    } elsif (/^\s*public:/) {
+        $scope = 1;
+    }
+    my $class = $classes[$#classes];
+    my $item;
+
+    if (/^\s*$class\((?:const\s+)?\&?$class\&?\s+\w+\s*\)\;/){
+        $item = "$class-Copy";
+    } elsif (/^\s*\&?$class\&? operator=\((?:const\s+)?\&?$class\&?\s+\w+\s*\)\;/){
+        $item = "$class-Assignment";
+    } elsif (/^\s*\~$class\(\)\;/) {
+        $item = "$class-Destructor";
+    }
+
+    if ($item) {
+        debug_print "$item found on line $.\n\t$_\n";
+        $scope ? push(@public, $item) : push(@private, $item);
+    }
+
+    return 0;
+}
+
+
+sub check_header() {
+    if ($file !~ /\.hpp$/) {
+        debug_print "$file is not a header file.\n";
+        return 0;
+    }
+    if ($file =~ /.*[-_]private\.hpp$/) {
+        debug_print "Discovered that $file is a private header!\n";
+        return 0;
+    }
+
+    local $lcomment = 0;
+    local $includeGuard = 0;
+    local $preprocessorNest = 0;
+    %warnings = 0;
+
+    local $scope = 0; # 0 = Private/Protected. 1 = Public
+    local @public = (); # Used for constructor location
+    local @private = (); # If something's here, its probably disabled.
+    local @classes = (); # Queue of classes to handle nesting.
+
+    open HEADER, $file or die $!;
+    while (<HEADER>) {
+        # Preprocess the line
+        chomp;
+        my $notComment = is_comment $_;
+        if ($notComment) {
+            $_ = $notComment;
+        }
+
+        # Look for the various cases
+        $includeGuard = includeGuardCheck($includeGuard);
+
+        if (m/\s+using\s+/) {
+            $output .= "using statement in header.\n\t Line: $.\n";
+        }        
+
+        constructor_check();
+
+    }
+    @public && ($output .= "public defined: @public \n");
+    @private && ($output .= "private defined: @private \n");
+
+    close HEADER;
+}
+
+
+sub check_implementation() {
+    if ($file =~ /\.cpp$/) {
+        debug_print "Found an implementation file\n";
+    } elsif ($file =~ /.*[-_]private\.hpp$/) {
+        debug_print "Discovered that $file is a private header!\n";      
+    } else {
+        debug_print "$file is not an implementation file.\n";
+        return 0;
+    }
+
+    my $lcomment = 0;
+    %warnings = 0;
+
+    open IMPLEMENTATION, $file or die $!;
+    while (<IMPLEMENTATION>) {
+        # Preprocess the line
+        chomp;
+        my $notComment = is_comment $_;
+        if ($notComment) {
+            $_ = $notComment;
+        }
+
+        # Begin looking for the various cases
+        if (m/\#define (.+)\s*/i) {
+            $output .= "#define for $1 found\n\t Line: $.\n";
+        }
+
+        if (m/\s+goto\s+/) {
+            $output .= "goto used: line $.\n";
+        }
+
+        if (m/\W+[\*\(]*this[\*\)]*(?:\.|->)/ && # exclude common cases:
+            (not m/\W+(?:const_cast)\W+/)) {# const_cast
+            $output .= "`this` was used.\n" .
+                "\t$_\n\t Check for valid usage. Line: $.\n";
+        }
+
+        if (m/\(\*\w+\)\.\w+/ || m/\(\w+\*\)\.\w+/) {
+            $output .= "Use of (*variable).stuff instead of variable->stuff detected.\n" .
+                "\t$_\n\t Line: $.\n";
+        }
+
+    }
+    close IMPLEMENTATION;
+}
