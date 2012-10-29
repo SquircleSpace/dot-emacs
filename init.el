@@ -50,7 +50,12 @@
   ;; Set whitespace settings
   (require 'whitespace)
   (setq whitespace-style
-	'(trailing empty lines-tail indentation face))
+	'(trailing
+          empty
+          space-after-tab
+          space-before-tab
+          lines-tail
+          indentation face))
   (setq whitespace-action '(auto-cleanup))
   )
 
@@ -139,6 +144,9 @@ current directory in Python's search path."
   (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
   (add-hook 'haskell-mode-hook 'font-lock-mode)
   (add-hook 'haskell-mode-hook 'imenu-add-menubar-index)
+
+  (add-hook 'haskell-mode-hook 'whitespace-mode)
+
   )
 
 
