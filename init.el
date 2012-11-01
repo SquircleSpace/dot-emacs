@@ -112,6 +112,14 @@
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Scala
+
+(defun set-scala-options ()
+  (add-to-list 'load-path "~/.emacs.d/elisp/scala-mode")
+  (require 'scala-mode-auto)
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python
 
 (defun set-python-options ()
@@ -221,6 +229,7 @@ current directory in Python's search path."
   (set-haskell-options)
   (set-matlab-options)
   (set-c++-options)
+  (set-scala-options)
 
   ;; Load machine specific options
   (set-machine-options)
