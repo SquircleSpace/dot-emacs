@@ -3,6 +3,9 @@
 
 (defun set-global-options ()
 
+  ;; Make shell mode use zsh
+  (setq explicit-shell-file-name "/bin/zsh")
+
   ;; Show Column numbers
   (setq column-number-mode t)
 
@@ -23,25 +26,28 @@
   (setq scroll-conservatively 10000)
 
   ;; Mouse support
-  (require 'mouse)
-  (xterm-mouse-mode t)
-  (defun track-mouse (e)) 
-  (setq mouse-sel-mode t)
+  (unless window-system
+    (require 'mouse)
+    (xterm-mouse-mode t)
+    (defun track-mouse (e)) 
+    (setq mouse-sel-mode t)
 
-  ;; Mouse scrolling
-  (defun smooth-scroll (number-lines increment)
-    (if (= 0 number-lines)
-	t
-      (progn
-	(sit-for 0.02)
-	(scroll-up increment)
-	(smooth-scroll (- number-lines 1) increment))))
-
-  (global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 3 1)))
-  (global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll 3 -1)))
-
+    ;; Mouse scrolling
+    (defun smooth-scroll (number-lines increment)
+      (if (= 0 number-lines)
+          t
+        (progn
+          (sit-for 0.02)
+          (scroll-up increment)
+          (smooth-scroll (- number-lines 1) increment))))
+    
+    (global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 3 1)))
+    (global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll 3 -1)))
+    )
+  
   ;; Use hunspell for spellchecking
-  (setq-default ispell-program-name "hunspell"))
+  ;(setq-default ispell-program-name "hunspell")
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Whitespace
@@ -194,14 +200,7 @@ current directory in Python's search path."
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Misc
-
-(defun set-other-options ()
-
-  ;; Make shell mode use zsh
-  (setq explicit-shell-file-name "/bin/zsh")
-
-  )
+;; Machine
 
 (defun set-machine-options ()
   
@@ -212,12 +211,59 @@ current directory in Python's search path."
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; GUI
+
+(defun set-gui-options ()
+
+  ;; Hide tool bar
+  (tool-bar-mode -1)
+
+  ;; Hide fringes
+  (set-fringe-mode 0)
+
+  (setq default-frame-alist
+        '((width . 80)
+          (height . 40)))
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Option groups
+
+(defun kernel-mode ()
+  (interactive)
+  
+  (setq indent-tabs-mode t)
+  (setq tab-width 8)
+  (setq c-default-style
+        (quote
+         ((c-mode . "bsd")
+          (c++-mode . "bsd")
+          (java-mode . "java")
+          (awk-mode . "awk")
+          (other . "gnu"))))
+  (setq whitespace-action nil)
+  )
+
+(defun grader-mode ()
+  (interactive)
+  
+  (setq indent-tabs-mode nil)
+  (setq tab-width 8)
+  (setq whitespace-action nil)
+  (setq whitespace-style
+	'(space-after-tab
+          space-before-tab
+          lines-tail
+          indentation face))
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Apply options
 
 (defun set-all-options ()
 
   (set-global-options)
-  (set-other-options)
+  (set-gui-options)
 
   ;; Mode options
   (set-whitespace-options)
