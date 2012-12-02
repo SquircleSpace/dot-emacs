@@ -80,41 +80,6 @@
   (require 'org)
   (require 'org-latex)
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-
-  ;;;; Better subsections for pdf export org-mode
-  ;;(require 'org-latex)
-  ;;(unless (boundp 'org-export-latex-classes)
-  ;;  (setq org-export-latex-classes nil))
-  ;;(add-to-list 'org-export-latex-classes
-  ;;             '("article"
-  ;;      	 "\\documentclass{article}"
-  ;;      	 ("\\section{%s}" . "\\section*{%s}")
-  ;;      	 ("\\subsection{%s}" . "\\subsection*{%s}")
-  ;;      	 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-  ;;      	 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-  ;;      	 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-  ;;
-  ;;;; Used Minted for better code export
-  ;;(setq org-export-latex-listings 'minted)
-  ;;;;(setq org-export-latex-custom-lang-environments
-  ;;;;      '(
-  ;;;;        (emacs-lisp "common-lispcode")
-  ;;;;        ))
-  ;;(setq org-export-latex-minted-options
-  ;;      '(("frame" "lines")
-  ;;        ("fontsize" "\\scriptsize")
-  ;;        ("linenos" "")))
-  ;;(setq org-latex-to-pdf-process
-  ;;      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-  ;;        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-  ;;        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
-  ;;
-  ;;;; Org code languages
-  ;;;(org-babel-do-load-languages
-  ;;; 'org-babel-load-languages
-  ;;; '((emacs-lisp . t)
-  ;;;   (R . t)
-  ;;;   (python . t)))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -191,6 +156,17 @@ current directory in Python's search path."
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; LaTeX
+
+(defun set-latex-options ()
+  (add-to-list 'load-path
+               (expand-file-name "/opt/local/share/emacs/site-lisp"))
+  (require 'tex-site)
+
+  (setq LaTeX-command "pdflatex")
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; CS 70
 
 (defun set-cs70-options ()
@@ -242,6 +218,13 @@ current directory in Python's search path."
           (awk-mode . "awk")
           (other . "gnu"))))
   (setq whitespace-action nil)
+  (setq whitespace-style
+	'(trailing
+          empty
+          space-after-tab
+          space-before-tab
+          lines-tail
+          indentation face))
   )
 
 (defun grader-mode ()
@@ -257,6 +240,12 @@ current directory in Python's search path."
           indentation face))
   )
 
+(defun default-mode ()
+  (interactive)
+
+  (set-all-options)
+  )
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Apply options
 
@@ -269,6 +258,7 @@ current directory in Python's search path."
   (set-whitespace-options)
   (set-org-mode-options)
   (set-cs70-options)
+  (set-latex-options)
 
   ;; Programming options
   (set-python-options)
