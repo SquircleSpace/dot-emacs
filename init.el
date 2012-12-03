@@ -29,7 +29,7 @@
   (unless window-system
     (require 'mouse)
     (xterm-mouse-mode t)
-    (defun track-mouse (e)) 
+    (defun track-mouse (e))
     (setq mouse-sel-mode t)
 
     ;; Mouse scrolling
@@ -40,11 +40,11 @@
           (sit-for 0.02)
           (scroll-up increment)
           (smooth-scroll (- number-lines 1) increment))))
-    
+
     (global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 3 1)))
     (global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll 3 -1)))
     )
-  
+
   ;; Use hunspell for spellchecking
   ;(setq-default ispell-program-name "hunspell")
   )
@@ -56,7 +56,7 @@
   ;; Set whitespace settings
   (require 'whitespace)
   (setq whitespace-style
-	'(trailing
+    '(trailing
           empty
           space-after-tab
           space-before-tab
@@ -106,12 +106,12 @@ module's code will fail to find other modules in the same directory.
 Adding this function to `inferior-python-mode-hook' reinstates the
 current directory in Python's search path."
     (python-send-string "sys.path[0:0] = ['']"))
-  
+
   (add-hook 'inferior-python-mode-hook
-	    'python-reinstate-current-directory)
-  
+        'python-reinstate-current-directory)
+
   (add-hook 'python-mode-hook
-	    'whitespace-mode)
+        'whitespace-mode)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -132,7 +132,7 @@ current directory in Python's search path."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MATLAB
 
-(defun set-matlab-options ()  
+(defun set-matlab-options ()
   ;; Add matlab support
   (add-to-list 'load-path "~/.emacs.d/elisp/mlab")
   (load-library "matlab-load")
@@ -144,15 +144,15 @@ current directory in Python's search path."
 (defun set-c++-options ()
   ;; Set C++ style
   (setq c-default-style
-	(quote
-	 ((c-mode . "stroustrup")
-	  (c++-mode . "stroustrup")
-	  (java-mode . "java")
-	  (awk-mode . "awk")
-	  (other . "gnu"))))
+    (quote
+     ((c-mode . "stroustrup")
+      (c++-mode . "stroustrup")
+      (java-mode . "java")
+      (awk-mode . "awk")
+      (other . "gnu"))))
 
   (add-hook 'c-mode-common-hook
-	    'whitespace-mode)
+        'whitespace-mode)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -179,7 +179,14 @@ current directory in Python's search path."
 ;; Machine
 
 (defun set-machine-options ()
-  
+
+  ;; Detect system
+  ; Mac
+  (when (eq system-type 'darwin)
+    (setq mac-command-modifier (quote super))
+    (setq mac-option-modifier (quote meta))
+    )
+
   ;; Check if the extra elisp file exists
   (if (file-exists-p "~/.emacs.d/machine.el")
       (load "~/.emacs.d/machine.el")
@@ -191,15 +198,22 @@ current directory in Python's search path."
 
 (defun set-gui-options ()
 
-  ;; Hide tool bar
-  (tool-bar-mode -1)
+  (when window-system
+    ;; Hide tool bar
+    (tool-bar-mode -1)
 
-  ;; Hide fringes
-  (set-fringe-mode 0)
+    ;; Hide fringes
+    (set-fringe-mode 0)
 
-  (setq default-frame-alist
-        '((width . 80)
-          (height . 40)))
+    ;; Default frame size
+    (setq default-frame-alist
+          '((width . 80)
+            (height . 40)))
+
+    ;; Default buffer
+    (setq inhibit-startup-screen t)
+    (setq initial-buffer-choice t)
+    )
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -207,7 +221,7 @@ current directory in Python's search path."
 
 (defun kernel-mode ()
   (interactive)
-  
+
   (setq indent-tabs-mode t)
   (setq tab-width 8)
   (setq c-default-style
@@ -219,7 +233,7 @@ current directory in Python's search path."
           (other . "gnu"))))
   (setq whitespace-action nil)
   (setq whitespace-style
-	'(trailing
+    '(trailing
           empty
           space-after-tab
           space-before-tab
@@ -229,12 +243,12 @@ current directory in Python's search path."
 
 (defun grader-mode ()
   (interactive)
-  
+
   (setq indent-tabs-mode nil)
   (setq tab-width 8)
   (setq whitespace-action nil)
   (setq whitespace-style
-	'(space-after-tab
+    '(space-after-tab
           space-before-tab
           lines-tail
           indentation face))
