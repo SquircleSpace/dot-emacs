@@ -6,6 +6,13 @@
   ;; Make shell mode use zsh
   (setq explicit-shell-file-name "/bin/zsh")
 
+  ;; Hide menu bar
+  (menu-bar-mode -1)
+
+  ;; Use word-count mode
+  (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/"))
+  (require 'wc-mode)
+
   ;; Show Column numbers
   (setq column-number-mode t)
 
@@ -46,7 +53,49 @@
     )
 
   ;; Use hunspell for spellchecking
-  ;(setq-default ispell-program-name "hunspell")
+  (when (executable-find "hunspell")
+    (setq-default ispell-program-name "hunspell")
+    (setq ispell-dictionary "american"
+          ispell-extra-args '() ;; TeX mode "-t"
+          ispell-silently-savep t
+          )
+
+    (add-hook 'ispell-initialize-spellchecker-hook
+              (lambda ()
+                (setq ispell-base-dicts-override-alist
+                      '((nil ; default
+                         "[A-Za-z]" "[^A-Za-z]" "[']" t
+                         ("-d" "en_US" "-i" "utf-8") nil utf-8)
+                        ("american" ; Yankee English
+                         "[A-Za-z]" "[^A-Za-z]" "[']" t
+                         ("-d" "en_US" "-i" "utf-8") nil utf-8)
+                        ("british" ; British English
+                         "[A-Za-z]" "[^A-Za-z]" "[']" t
+                         ("-d" "en_GB" "-i" "utf-8") nil utf-8)))))
+    )
+
+  ;; Fix shift up
+  (defadvice terminal-init-xterm (after select-shift-up activate)
+    (define-key input-decode-map "\e[1;2A" [S-up]))
+
+
+  ;; Set gui options
+  (when window-system
+    ;; Hide tool bar
+    (tool-bar-mode -1)
+
+    ;; Hide fringes
+    (set-fringe-mode 0)
+
+    ;; Default frame size
+    (setq default-frame-alist
+          '((width . 80)
+            (height . 40)))
+
+    ;; Default buffer
+    (setq inhibit-startup-screen t)
+    (setq initial-buffer-choice t)
+    )
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -74,9 +123,6 @@
   (add-hook 'org-mode-hook 'org-indent-mode)
   (add-hook 'org-mode-hook 'flyspell-mode)
 
-  ;; Use private copy of org-mode
-  (add-to-list 'load-path
-               (expand-file-name "~/.emacs.d/elisp/org-mode/lisp"))
   (require 'org)
   (require 'org-latex)
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -110,8 +156,8 @@ current directory in Python's search path."
   (add-hook 'inferior-python-mode-hook
         'python-reinstate-current-directory)
 
-  (add-hook 'python-mode-hook
-        'whitespace-mode)
+  (add-hook 'python-mode-hook 'whitespace-mode)
+  (add-hook 'python-mode-hook 'flyspell-prog-mode)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -124,7 +170,31 @@ current directory in Python's search path."
   (add-hook 'haskell-mode-hook 'font-lock-mode)
   (add-hook 'haskell-mode-hook 'imenu-add-menubar-index)
 
+  (add-hook 'haskell-mode-hook 'flyspell-prog-mode)
   (add-hook 'haskell-mode-hook 'whitespace-mode)
+
+  (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/autocomplete/"))
+  (require 'haskell-ac)
+
+  (eval-after-load 'haskell-mode
+    '(progn
+       (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
+       ))
+
+  (defun my-haskell-mode-hook ()
+    (setq ac-sources
+          (append '(ac-source-yasnippet
+                    ac-source-abbrev
+                    ac-source-words-in-buffer
+                    my/ac-source-haskell)
+                  ac-sources))
+
+    (dolist (x '(haskell literate-haskell))
+      (add-hook
+       (intern (concat (symbol-name x)
+                       "-mode-hook"))
+       'turn-on-paredit))
+    )
 
   )
 
@@ -151,8 +221,9 @@ current directory in Python's search path."
       (awk-mode . "awk")
       (other . "gnu"))))
 
-  (add-hook 'c-mode-common-hook
-        'whitespace-mode)
+  (add-hook 'c-mode-common-hook 'whitespace-mode)
+  (add-hook 'c-mode-common-hook 'flyspell-prog-mode)
+
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -164,6 +235,9 @@ current directory in Python's search path."
   (require 'tex-site)
 
   (setq LaTeX-command "pdflatex")
+
+  (add-hook 'LaTeX-mode-hook 'visual-line-mode)
+  (add-hook 'LaTeX-mode-hook 'flyspell-mode)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -185,34 +259,19 @@ current directory in Python's search path."
   (when (eq system-type 'darwin)
     (setq mac-command-modifier (quote super))
     (setq mac-option-modifier (quote meta))
+    (setq TeX-view-program-list
+          (quote (("Open" "open %s.pdf"))))
+    (setq TeX-view-program-selection
+          (quote (
+                  ((output-dvi style-pstricks) "dvips and gv")
+                  (output-dvi "Open")
+                  (output-pdf "Open")
+                  (output-html "Open"))))
     )
 
   ;; Check if the extra elisp file exists
   (if (file-exists-p "~/.emacs.d/machine.el")
       (load "~/.emacs.d/machine.el")
-    )
-  )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; GUI
-
-(defun set-gui-options ()
-
-  (when window-system
-    ;; Hide tool bar
-    (tool-bar-mode -1)
-
-    ;; Hide fringes
-    (set-fringe-mode 0)
-
-    ;; Default frame size
-    (setq default-frame-alist
-          '((width . 80)
-            (height . 40)))
-
-    ;; Default buffer
-    (setq inhibit-startup-screen t)
-    (setq initial-buffer-choice t)
     )
   )
 
@@ -261,20 +320,64 @@ current directory in Python's search path."
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Minimap
+
+(defun set-minimap-options ()
+  (add-to-list 'load-path
+               (expand-file-name "~/.emacs.d/elisp/minimap"))
+  (require 'minimap)
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Flymake
+
+(defun set-flymake-options ()
+  (require 'flymake)
+  ;(add-hook 'java-mode-hook 'flymake-mode-on)
+
+  ;(defun my-java-flymake-init ()
+  ;  (list "javac" (list (flymake-init-create-temp-buffer-copy
+  ;                       'flymake-create-temp-with-folder-structure))))
+
+  ;(add-to-list 'flymake-allowed-file-name-masks
+  ;             '("\\.java$" my-java-flymake-init flymake-simple-cleanup))
+
+  (add-to-list 'load-path
+               (expand-file-name "~/.emacs.d/elisp/flymake"))
+  (require 'flymake-cursor)
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Autocomplete
+
+(defun set-autocomplete-options ()
+  (add-to-list 'load-path "~/.emacs.d/elisp/autocomplete/")
+  (require 'auto-complete-config)
+  (add-to-list 'ac-dictionary-directories "~/.emacs.d//ac-dict")
+  (ac-config-default)
+
+  (add-to-list 'ac-modes 'haskell-mode)
+  (ac-flyspell-workaround)
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Apply options
 
 (defun set-all-options ()
 
   (set-global-options)
-  (set-gui-options)
 
   ;; Mode options
+
+  ; Minor
+  (set-minimap-options)
+  (set-flymake-options)
+  (set-autocomplete-options)
   (set-whitespace-options)
+  ; Major
   (set-org-mode-options)
   (set-cs70-options)
   (set-latex-options)
-
-  ;; Programming options
   (set-python-options)
   (set-haskell-options)
   (set-matlab-options)

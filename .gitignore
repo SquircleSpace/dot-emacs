@@ -1,6 +1,11 @@
+\#*#
 tramp
 auto-save-list
+ac-comphist.dat
 
+
+elpa/*-readme.txt
+elpa/archives
 # Complied files
 *.elc
 
