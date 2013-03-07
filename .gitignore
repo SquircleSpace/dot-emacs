@@ -2,11 +2,10 @@
 tramp
 auto-save-list
 ac-comphist.dat
-
+.DS_Store
 
 elpa/*-readme.txt
 elpa/archives
-# Complied files
 *.elc
 
 # Temporary files

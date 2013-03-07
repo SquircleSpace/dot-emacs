@@ -95,6 +95,11 @@
     ;; Default buffer
     (setq inhibit-startup-screen t)
     (setq initial-buffer-choice t)
+
+    ;; Set theme -- This looks ugly on terminal, so only use for gui
+    (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/emacs-color-theme-solarized/")
+    (load-theme 'solarized-dark t)
+
     )
   )
 
