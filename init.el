@@ -169,36 +169,22 @@ current directory in Python's search path."
 
 (defun set-haskell-options ()
   (load "~/.emacs.d/elisp/haskell-mode/haskell-site-file")
-  (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-  (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-  (add-hook 'haskell-mode-hook 'font-lock-mode)
-  (add-hook 'haskell-mode-hook 'imenu-add-menubar-index)
-
-  (add-hook 'haskell-mode-hook 'flyspell-prog-mode)
-  (add-hook 'haskell-mode-hook 'whitespace-mode)
-
   (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/autocomplete/"))
   (require 'haskell-ac)
 
   (eval-after-load 'haskell-mode
     '(progn
-       (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
+
+       (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+       (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+       (add-hook 'haskell-mode-hook 'font-lock-mode)
+       (add-hook 'haskell-mode-hook 'imenu-add-menubar-index)
+
+       (add-hook 'haskell-mode-hook 'flyspell-prog-mode)
+       (add-hook 'haskell-mode-hook 'whitespace-mode)
+
+       ;;(add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
        ))
-
-  (defun my-haskell-mode-hook ()
-    (setq ac-sources
-          (append '(ac-source-yasnippet
-                    ac-source-abbrev
-                    ac-source-words-in-buffer
-                    my/ac-source-haskell)
-                  ac-sources))
-
-    (dolist (x '(haskell literate-haskell))
-      (add-hook
-       (intern (concat (symbol-name x)
-                       "-mode-hook"))
-       'turn-on-paredit))
-    )
 
   )
 
