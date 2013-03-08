@@ -78,7 +78,6 @@
   (defadvice terminal-init-xterm (after select-shift-up activate)
     (define-key input-decode-map "\e[1;2A" [S-up]))
 
-
   ;; Set gui options
   (when window-system
     ;; Hide tool bar
@@ -94,7 +93,7 @@
 
     ;; Default buffer
     (setq inhibit-startup-screen t)
-    (setq initial-buffer-choice t)
+    (setq initial-buffer-choice nil)
 
     ;; Set theme -- This looks ugly on terminal, so only use for gui
     (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/emacs-color-theme-solarized/")
@@ -235,8 +234,7 @@ current directory in Python's search path."
 ;; LaTeX
 
 (defun set-latex-options ()
-  (add-to-list 'load-path
-               (expand-file-name "/opt/local/share/emacs/site-lisp"))
+  (add-to-list 'load-path "~/.emacs.d/elpa/org-20121210/")
   (require 'tex-site)
 
   (setq LaTeX-command "pdflatex")
@@ -370,6 +368,11 @@ current directory in Python's search path."
 
 (defun set-all-options ()
 
+  (if (< emacs-major-version 23)
+      (progn
+        (error "This version of emacs is as old as dirt."))
+    )
+
   (set-global-options)
 
   ;; Mode options
@@ -379,6 +382,7 @@ current directory in Python's search path."
   (set-flymake-options)
   (set-autocomplete-options)
   (set-whitespace-options)
+
   ; Major
   (set-org-mode-options)
   (set-cs70-options)
