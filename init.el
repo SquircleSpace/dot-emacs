@@ -3,6 +3,9 @@
 
 (defun set-global-options ()
 
+  ;; Bar cursor
+  (set-default 'cursor-type 'bar)
+
   ;; Make shell mode use zsh
   (setq explicit-shell-file-name "/bin/zsh")
 
@@ -32,26 +35,6 @@
   ;; Don't jump when cursor goes out of screen
   (setq scroll-conservatively 10000)
 
-  ;; Mouse support
-  (unless window-system
-    (require 'mouse)
-    (xterm-mouse-mode t)
-    (defun track-mouse (e))
-    (setq mouse-sel-mode t)
-
-    ;; Mouse scrolling
-    (defun smooth-scroll (number-lines increment)
-      (if (= 0 number-lines)
-          t
-        (progn
-          (sit-for 0.02)
-          (scroll-up increment)
-          (smooth-scroll (- number-lines 1) increment))))
-
-    (global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 3 1)))
-    (global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll 3 -1)))
-    )
-
   ;; Use hunspell for spellchecking
   (when (executable-find "hunspell")
     (setq-default ispell-program-name "hunspell")
@@ -78,10 +61,32 @@
   (defadvice terminal-init-xterm (after select-shift-up activate)
     (define-key input-decode-map "\e[1;2A" [S-up]))
 
+  ;; Set terminal emacs options
+  (unless window-system
+    ;; Enable mouse support
+    (require 'mouse)
+    (xterm-mouse-mode t)
+    (defun track-mouse (e))
+    (setq mouse-sel-mode t)
+
+    ;; Mouse scrolling
+    (defun smooth-scroll (number-lines increment)
+      (if (= 0 number-lines)
+          t
+        (progn
+          (sit-for 0.02)
+          (scroll-up increment)
+          (smooth-scroll (- number-lines 1) increment))))
+
+    (global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 3 1)))
+    (global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll 3 -1)))
+    )
+
   ;; Set gui options
   (when window-system
     ;; Hide tool bar
     (tool-bar-mode -1)
+    (scroll-bar-mode -1)
 
     ;; Hide fringes
     (set-fringe-mode 0)
