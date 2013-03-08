@@ -234,7 +234,7 @@ current directory in Python's search path."
 ;; LaTeX
 
 (defun set-latex-options ()
-  (add-to-list 'load-path "~/.emacs.d/elpa/org-20121210/")
+  (add-to-list 'load-path "~/.emacs.d/elpa/auctex-11.86/")
   (require 'tex-site)
 
   (setq LaTeX-command "pdflatex")
