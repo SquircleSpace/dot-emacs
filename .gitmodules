@@ -1,3 +1,0 @@
-[submodule "elisp/haskell-mode"]
-	path = elisp/haskell-mode
-	url = git://github.com/haskell/haskell-mode.git

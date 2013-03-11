@@ -165,23 +165,16 @@ current directory in Python's search path."
 ;; Haskell
 
 (defun set-haskell-options ()
-  (load "~/.emacs.d/elisp/haskell-mode/haskell-site-file")
   (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/autocomplete/"))
   (require 'haskell-ac)
 
-  (eval-after-load 'haskell-mode
-    '(progn
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+  (add-hook 'haskell-mode-hook 'font-lock-mode)
+  (add-hook 'haskell-mode-hook 'imenu-add-menubar-index)
 
-       (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-       (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-       (add-hook 'haskell-mode-hook 'font-lock-mode)
-       (add-hook 'haskell-mode-hook 'imenu-add-menubar-index)
-
-       (add-hook 'haskell-mode-hook 'flyspell-prog-mode)
-       (add-hook 'haskell-mode-hook 'whitespace-mode)
-
-       ;;(add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
-       ))
+  (add-hook 'haskell-mode-hook 'flyspell-prog-mode)
+  (add-hook 'haskell-mode-hook 'whitespace-mode)
 
   )
 
@@ -371,6 +364,8 @@ current directory in Python's search path."
 
   ;; Init package
   (require 'package)
+  (add-to-list 'package-archives
+               '("marmalade" . "http://marmalade-repo.org/packages/"))
   (package-initialize)
   )
 
