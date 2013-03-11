@@ -123,9 +123,6 @@
   (add-hook 'org-mode-hook 'org-indent-mode)
   (add-hook 'org-mode-hook 'flyspell-mode)
 
-  ;(add-to-list 'load-path "~/.emacs.d/elpa/org-20121210/")
-  ;(require 'org)
-  ;(require 'org-latex)
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
   )
 
@@ -165,8 +162,9 @@ current directory in Python's search path."
 ;; Haskell
 
 (defun set-haskell-options ()
-  (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/autocomplete/"))
+  (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/"))
   (require 'haskell-ac)
+  (add-to-list 'ac-modes 'haskell-mode)
 
   (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
   (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
@@ -210,9 +208,6 @@ current directory in Python's search path."
 ;; LaTeX
 
 (defun set-latex-options ()
-  ;(add-to-list 'load-path "~/.emacs.d/elpa/auctex-11.86/")
-  ;(require 'tex-site)
-
   (setq LaTeX-command "pdflatex")
 
   (add-hook 'LaTeX-mode-hook 'visual-line-mode)
@@ -302,32 +297,55 @@ current directory in Python's search path."
 ;; Flymake
 
 (defun set-flymake-options ()
-  (require 'flymake)
-  ;(add-hook 'java-mode-hook 'flymake-mode-on)
-
-  ;(defun my-java-flymake-init ()
-  ;  (list "javac" (list (flymake-init-create-temp-buffer-copy
-  ;                       'flymake-create-temp-with-folder-structure))))
-
-  ;(add-to-list 'flymake-allowed-file-name-masks
-  ;             '("\\.java$" my-java-flymake-init flymake-simple-cleanup))
-
-  (add-to-list 'load-path
-               (expand-file-name "~/.emacs.d/elisp/flymake"))
-  (require 'flymake-cursor)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Autocomplete
 
 (defun set-autocomplete-options ()
-  (add-to-list 'load-path "~/.emacs.d/elisp/autocomplete/")
   (require 'auto-complete-config)
-  (add-to-list 'ac-dictionary-directories "~/.emacs.d//ac-dict")
   (ac-config-default)
-
-  (add-to-list 'ac-modes 'haskell-mode)
   (ac-flyspell-workaround)
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package management
+
+(defvar needed-packages
+  '(auctex auto-complete flymake flymake-cursor
+           haskell-mode org rainbow-mode undo-tree))
+
+(defun install-packages ()
+  (message "%s" "Packages missing. Refreshing...")
+  
+  (package-refresh-contents)
+
+  (message "%s" "done. Installing...")
+
+  (dolist (p needed-packages)
+    (when (not (package-installed-p p))
+      (package-install p)))
+  )
+
+(defun all-packages-installed ()
+  (require 'cl)
+  (loop for p in needed-packages
+	when (not (package-installed-p p)) do (return nil)
+	finally (return t)))
+
+(defun set-package-options ()
+  ;; Init package
+  (require 'package)
+  (add-to-list 'package-archives
+               '("marmalade" . "http://marmalade-repo.org/packages/"))
+  (package-initialize)
+
+  (when (not (all-packages-installed))
+    (install-packages))
+
+  ;; What does this do?
+  ;(package-menu--find-upgrades)
+  
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -339,6 +357,8 @@ current directory in Python's search path."
       (progn
         (error "This version of emacs is as old as dirt."))
     )
+
+  (set-package-options)
 
   (set-global-options)
 
@@ -362,11 +382,6 @@ current directory in Python's search path."
   ;; Load machine specific options
   (set-machine-options)
 
-  ;; Init package
-  (require 'package)
-  (add-to-list 'package-archives
-               '("marmalade" . "http://marmalade-repo.org/packages/"))
-  (package-initialize)
   )
 
 (custom-set-variables

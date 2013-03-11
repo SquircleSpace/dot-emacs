@@ -5,8 +5,7 @@ ac-comphist.dat
 eshell
 .DS_Store
 
-elpa/*-readme.txt
-elpa/archives
+elpa
 *.elc
 
 # Temporary files
