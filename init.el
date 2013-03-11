@@ -308,7 +308,7 @@ current directory in Python's search path."
 
 (defvar needed-packages
   '(auctex auto-complete flymake flymake-cursor
-           haskell-mode org rainbow-mode undo-tree))
+           haskell-mode org rainbow-mode undo-tree magit))
 
 (defun install-packages ()
   (message "%s" "Packages missing. Refreshing...")
