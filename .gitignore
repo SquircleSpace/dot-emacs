@@ -2,6 +2,7 @@
 tramp
 auto-save-list
 ac-comphist.dat
+eshell
 .DS_Store
 
 elpa/*-readme.txt
