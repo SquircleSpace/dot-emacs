@@ -4,6 +4,7 @@ auto-save-list
 ac-comphist.dat
 eshell
 .DS_Store
+url/cookies
 
 elpa
 *.elc
