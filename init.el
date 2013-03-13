@@ -411,4 +411,5 @@ current directory in Python's search path."
  ;; If there is more than one, they won't work right.
  '(whitespace-empty ((t (:background "dark slate gray" :foreground "#dc322f"))))
  '(whitespace-trailing ((t (:background "dark slate gray" :foreground "#dc322f" :inverse-video nil :underline nil :slant normal :weight bold)))))
+
 (set-all-options)
