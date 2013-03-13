@@ -95,7 +95,6 @@
     (setq initial-buffer-choice nil)
 
     ;; Set theme -- This looks ugly on terminal, so only use for gui
-    (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/emacs-color-theme-solarized/")
     (load-theme 'solarized-dark t)
 
     )
@@ -322,7 +321,8 @@ current directory in Python's search path."
 
 (defvar needed-packages
   '(auctex auto-complete flymake flymake-cursor
-           haskell-mode org rainbow-mode undo-tree magit))
+           haskell-mode org rainbow-mode undo-tree magit
+           color-theme-solarized))
 
 (defun install-packages ()
   (message "%s" "Packages missing. Refreshing...")
@@ -397,6 +397,7 @@ current directory in Python's search path."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes (quote ("71b172ea4aad108801421cc5251edb6c792f3adbaecfa1c52e94e3d99634dee7" default)))
  '(fringe-mode (quote (0)) nil (fringe))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
