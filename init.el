@@ -3,6 +3,9 @@
 
 (defun set-global-options ()
 
+  ;; iswitch-buffer is the best
+  (iswitchb-mode)
+
   ;; Bar cursor
   (set-default 'cursor-type 'bar)
 
