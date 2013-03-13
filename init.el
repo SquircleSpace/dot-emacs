@@ -157,18 +157,22 @@ current directory in Python's search path."
 ;; Haskell
 
 (defun set-haskell-options ()
-  (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/"))
-  (require 'haskell-ac)
-  (add-to-list 'ac-modes 'haskell-mode)
-
+  (eval-after-load 'auto-complete
+    '(progn
+       (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/"))
+       (require 'haskell-ac)
+       (require 'auto-complete-config)
+       (add-to-list 'ac-modes 'haskell-mode)
+       )
+    )
   (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
   (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
   (add-hook 'haskell-mode-hook 'font-lock-mode)
   (add-hook 'haskell-mode-hook 'imenu-add-menubar-index)
-
+  
   (add-hook 'haskell-mode-hook 'flyspell-prog-mode)
   (add-hook 'haskell-mode-hook 'whitespace-mode)
-
+  
   )
 
 
