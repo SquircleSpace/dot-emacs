@@ -14,7 +14,7 @@
 
   ;; Use word-count mode
   (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/"))
-  (require 'wc-mode)
+  (autoload 'wc-mode "wc-mode" nil t)
 
   ;; Show Column numbers
   (setq column-number-mode t)
