@@ -61,6 +61,9 @@
   (defadvice terminal-init-xterm (after select-shift-up activate)
     (define-key input-decode-map "\e[1;2A" [S-up]))
 
+  ;; No menu bar
+  (menu-bar-mode -1)
+
   ;; Set terminal emacs options
   (unless window-system
     ;; Enable mouse support
@@ -68,9 +71,6 @@
     (xterm-mouse-mode t)
     (defun track-mouse (e))
     (setq mouse-sel-mode t)
-
-    ;; No menu bar
-    (menu-bar-mode -1)
 
     ;; Mouse scrolling
     (defun smooth-scroll (number-lines increment)
@@ -252,6 +252,12 @@ current directory in Python's search path."
                   (output-dvi "Open")
                   (output-pdf "Open")
                   (output-html "Open"))))
+
+    (when window-system
+      ;; Enable menubar again (full screen button needs it?!?)
+      (menu-bar-mode 1)
+      )
+
     )
 
   ;; Check if the extra elisp file exists
