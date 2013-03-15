@@ -4,7 +4,7 @@
 (defun set-global-options ()
 
   ;; No bell
-  (visible-bell t)
+  (setq visible-bell t)
 
   ;; iswitch-buffer is the best
   (iswitchb-mode)
