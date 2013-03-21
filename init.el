@@ -411,7 +411,10 @@ current directory in Python's search path."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("71b172ea4aad108801421cc5251edb6c792f3adbaecfa1c52e94e3d99634dee7" default)))
+ '(comint-process-echoes t)
+ '(comint-prompt-read-only t)
+ '(comint-scroll-to-bottom-on-input (quote this))
+ '(custom-safe-themes (quote ("36a309985a0f9ed1a0c3a69625802f87dee940767c9e200b89cdebdb737e5b29" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" "71b172ea4aad108801421cc5251edb6c792f3adbaecfa1c52e94e3d99634dee7" default)))
  '(fringe-mode 0 nil (fringe))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
