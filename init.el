@@ -309,12 +309,6 @@ current directory in Python's search path."
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Flymake
-
-(defun set-flymake-options ()
-  )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Autocomplete
 
 (defun set-autocomplete-options ()
@@ -383,7 +377,6 @@ current directory in Python's search path."
   ;; Mode options
 
   ; Minor
-  (set-flymake-options)
   (set-autocomplete-options)
   (set-whitespace-options)
 
