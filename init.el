@@ -251,6 +251,8 @@ current directory in Python's search path."
     (when window-system
       ;; Enable menubar again (full screen button needs it?!?)
       (menu-bar-mode 1)
+      ;; We are running a guifull emacs! Fix our path.
+      (exec-path-from-shell-initialize)
       )
 
     )
@@ -326,7 +328,7 @@ current directory in Python's search path."
 (defvar needed-packages
   '(auctex auto-complete flymake flymake-cursor
            haskell-mode org rainbow-mode undo-tree magit
-           color-theme-solarized))
+           color-theme-solarized exec-path-from-shell))
 
 (defun install-packages ()
   (message "%s" "Packages missing. Refreshing...")
