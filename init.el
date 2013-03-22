@@ -12,9 +12,6 @@
   ;; Bar cursor
   (set-default 'cursor-type 'bar)
 
-  ;; Make shell mode use zsh
-  (setq explicit-shell-file-name "/bin/zsh")
-
   ;; Use word-count mode
   (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/"))
   (autoload 'wc-mode "wc-mode" nil t)
@@ -105,6 +102,23 @@
 
     )
   )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Shell
+
+(defun set-shell-options ()
+  ;; Make shell output read only
+  (defadvice ro-shell-output (after comint-output-filter)
+    (add-text-properties (point-min) (point)
+                         '(read-only t front-sticky (read-only)))
+    )
+  
+  (ad-activate 'ro-shell-output)
+
+  ;; Make shell mode use zsh
+  (setq explicit-shell-file-name "/bin/zsh")
+  )
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Whitespace
@@ -400,6 +414,7 @@ current directory in Python's search path."
   (set-haskell-options)
   (set-matlab-options)
   (set-c++-options)
+  (set-shell-options)
 
   ;; Load machine specific options
   (set-machine-options)
