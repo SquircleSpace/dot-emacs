@@ -239,6 +239,7 @@ current directory in Python's search path."
     (global-set-key [(super w)]
                     (lambda () (interactive) (delete-window)))
     (global-set-key [(super z)] 'undo)
+    ;; Make auctex do the right thing with open.
     (setq TeX-view-program-list
           (quote (("Open" "open %s.pdf"))))
     (setq TeX-view-program-selection
