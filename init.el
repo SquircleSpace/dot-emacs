@@ -86,13 +86,14 @@
 
 (defun set-shell-options ()
   ;; Make shell output read only
-  (defadvice ro-shell-output (after comint-output-filter)
-    (add-text-properties (point-min) (point)
-                         '(read-only t front-sticky (read-only)))
-    )
+  (add-hook
+   'comint-output-filter-functions
+   '(lambda (string)
+      ;; Need to inhibit read only to re-read-onlyify everything
+      (let ((inhibit-read-only t))
+        (add-text-properties (point-min) (point-max)
+                             '(read-only t front-sticky (read-only))))))
   
-  (ad-activate 'ro-shell-output)
-
   ;; Make shell mode use zsh
   (setq explicit-shell-file-name "/bin/zsh")
   )
