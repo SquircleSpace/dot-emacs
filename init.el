@@ -362,6 +362,15 @@ current directory in Python's search path."
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Flyspell options
+
+(defun set-flyspell-options ()
+
+  ;; Mouse 3 (right click) is for spellchecking, not mouse 2 (middle)!
+  (eval-after-load "flyspell" 
+    '(define-key flyspell-mode-map [down-mouse-3] 'flyspell-correct-word)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Apply options
 
 (defun set-all-options ()
@@ -380,6 +389,7 @@ current directory in Python's search path."
   ; Minor
   (set-autocomplete-options)
   (set-whitespace-options)
+  (set-flyspell-options)
 
   ; Major
   (set-org-mode-options)
