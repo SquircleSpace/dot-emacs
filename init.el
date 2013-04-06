@@ -4,7 +4,10 @@
 (defun set-global-options ()
 
   ;; No bell
-  (setq visible-bell t)
+  ; Do nothing
+  (setq ring-bell-function (lambda () (progn)))
+  ; Flash
+  ;(setq visible-bell t)
 
   ;; iswitch-buffer is the best
   (iswitchb-mode)
