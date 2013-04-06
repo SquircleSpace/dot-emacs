@@ -427,7 +427,7 @@ current directory in Python's search path."
  '(comint-process-echoes t)
  '(comint-prompt-read-only t)
  '(comint-scroll-to-bottom-on-input (quote this))
- '(custom-safe-themes (quote ("36a309985a0f9ed1a0c3a69625802f87dee940767c9e200b89cdebdb737e5b29" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" "71b172ea4aad108801421cc5251edb6c792f3adbaecfa1c52e94e3d99634dee7" default)))
+ '(custom-safe-themes (quote ("4e72cb2841e4801ba202a120c1cffdf88f5512536e557d03b3626d890b52f201" default)))
  '(fringe-mode 0 nil (fringe))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
