@@ -104,7 +104,7 @@
 
   ;; Use colors
   (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-  
+
   ;; Make shell mode use zsh
   (setq explicit-shell-file-name "/bin/zsh")
   )
@@ -178,10 +178,10 @@ current directory in Python's search path."
   (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
   (add-hook 'haskell-mode-hook 'font-lock-mode)
   (add-hook 'haskell-mode-hook 'imenu-add-menubar-index)
-  
+
   (add-hook 'haskell-mode-hook 'flyspell-prog-mode)
   (add-hook 'haskell-mode-hook 'whitespace-mode)
-  
+
   )
 
 
@@ -341,7 +341,7 @@ current directory in Python's search path."
 
 (defun install-packages ()
   (message "%s" "Packages missing. Refreshing...")
-  
+
   (package-refresh-contents)
 
   (message "%s" "done. Installing...")
@@ -371,7 +371,7 @@ current directory in Python's search path."
 
   ;; What does this do?
   ;(package-menu--find-upgrades)
-  
+
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -380,7 +380,7 @@ current directory in Python's search path."
 (defun set-flyspell-options ()
 
   ;; Mouse 3 (right click) is for spellchecking, not mouse 2 (middle)!
-  (eval-after-load "flyspell" 
+  (eval-after-load "flyspell"
     '(define-key flyspell-mode-map [down-mouse-3] 'flyspell-correct-word)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
