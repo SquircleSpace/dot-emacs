@@ -424,13 +424,17 @@ current directory in Python's search path."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(comint-process-echoes t)
- '(comint-prompt-read-only t)
- '(comint-scroll-to-bottom-on-input (quote this))
+ '(comint-process-echoes t nil nil "Assume shell echo commands you send them. Don't echo for them.")
+ '(comint-prompt-read-only t nil nil "Don't allow changing shell prompt.")
+ '(comint-scroll-to-bottom-on-input (quote this) nil nil "Input always goes to the prompt in shell mode.")
  '(custom-safe-themes (quote ("4e72cb2841e4801ba202a120c1cffdf88f5512536e557d03b3626d890b52f201" default)))
- '(fringe-mode 0 nil (fringe))
- '(scroll-bar-mode nil)
- '(tool-bar-mode nil))
+ '(doc-view-continuous t nil nil "Make scrolling in pdf view a bit nicer (advance to next page automatically).")
+ '(eshell-banner-message "" nil nil "No welcome message when launching eshell")
+ '(eshell-scroll-to-bottom-on-input (quote this) nil nil "Input always goes to the prompt in eshell mode.")
+ '(fringe-mode 0 nil (fringe) "No fringes ever")
+ '(scroll-bar-mode nil nil nil "No scroll bar ever.")
+ '(tool-bar-mode nil nil nil "No tool bar ever.")
+ '(tramp-default-method "ssh" nil nil "Use SSH for tramp by default."))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
