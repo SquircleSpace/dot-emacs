@@ -27,9 +27,9 @@
 
 (defvar rubric-font-lock-defaults
   `((
-     ("^\+\+\+>.*$" . positive-comment-font)
-     ("^\-\-\->.*$" . negative-comment-font)
-     ("^\\?\\?\\?>.*$" . question-comment-font)
+     ("^[\t ]*\\+\\+\\+>.*$" . positive-comment-font)
+     ("^[\t ]*\\-\\-\\->.*$" . negative-comment-font)
+     ("^[\t ]*\\?\\?\\?>.*$" . question-comment-font)
      ("^=+\n\\([^\n]*\n\\)*=+$" . section-divider-font)
      ("^\\(\\([A-Za-z0-9 ]*\\)[:.] *Total *= *\\)[^ ]*\\( +/ *[0-9]+\\)" 
       . section-name-font)
