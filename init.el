@@ -427,7 +427,7 @@ current directory in Python's search path."
  '(comint-process-echoes t nil nil "Assume shell echo commands you send them. Don't echo for them.")
  '(comint-prompt-read-only t nil nil "Don't allow changing shell prompt.")
  '(comint-scroll-to-bottom-on-input (quote this) nil nil "Input always goes to the prompt in shell mode.")
- '(custom-safe-themes (quote ("4e72cb2841e4801ba202a120c1cffdf88f5512536e557d03b3626d890b52f201" default)))
+ '(custom-safe-themes (quote ("bcb5c86c0e6576d1d6bba9bd2a55cd5c20a57d307ed13bf4ed0e86ed944e33df" default)))
  '(doc-view-continuous t nil nil "Make scrolling in pdf view a bit nicer (advance to next page automatically).")
  '(eshell-banner-message "" nil nil "No welcome message when launching eshell")
  '(eshell-scroll-to-bottom-on-input (quote this) nil nil "Input always goes to the prompt in eshell mode.")
