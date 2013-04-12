@@ -10,7 +10,7 @@
   ;(setq visible-bell t)
 
   ;; iswitch-buffer is the best
-  (iswitchb-mode)
+  ;(iswitchb-mode)
 
   ;; Bar cursor
   (set-default 'cursor-type 'bar)
@@ -432,6 +432,8 @@ current directory in Python's search path."
  '(eshell-banner-message "" nil nil "No welcome message when launching eshell")
  '(eshell-scroll-to-bottom-on-input (quote this) nil nil "Input always goes to the prompt in eshell mode.")
  '(fringe-mode 0 nil (fringe) "No fringes ever")
+ '(ido-enable-flex-matching t)
+ '(ido-mode (quote both) nil (ido))
  '(scroll-bar-mode nil nil nil "No scroll bar ever.")
  '(tool-bar-mode nil nil nil "No tool bar ever.")
  '(tramp-default-method "ssh" nil nil "Use SSH for tramp by default."))
