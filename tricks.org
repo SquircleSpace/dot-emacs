@@ -9,6 +9,14 @@ Info: http://www.gnu.org/software/emacs/manual/html_node/emacs/Tags.html
 
 Tags helps you jump right to functions and such
 
+*** ECB
+Info: http://ecb.sourceforge.net/
+
+Makes Emacs look like an IDE.
+*** Minimap
+Info: http://www.emacswiki.org/emacs/MiniMap
+
+Copies Sublime Text's scroll-bar thing.
 ** Reading
 *** Glasses Mode
 Info: http://www.gnu.org/software/emacs/manual/html_node/emacs/Glasses.html
@@ -38,24 +46,45 @@ Magit is a visual interface to git. It is very magic.
 Info: http://www.gnu.org/software/emacs/manual/html_mono/ediff.html
 
 Ediff is a mode/program for generating and viewing diffs. It is easier to use/read than a raw diff. It is also very powerful and has great features like modifying the diff and diffing word-by-word.
+** Debugging
+*** gdb
+Info: http://www.gnu.org/software/emacs/manual/html_node/emacs/GDB-Graphical-Interface.html
+
+=M-x gdb= followed by =M-x gdb-many-windows= leads to magic debugging with gdb.
+*** Flymake
+Info: http://flymake.sourceforge.net/
+
+Like a spellchecker but for programs.
+** Other
+*** CEDET
+Info: http://cedet.sourceforge.net/
+
+CEDET is a Collection of Emacs Development Environment Tools. If ECB makes Emacs look like an IDE, then CEDET turns Emacs into an IDE.
 * Global
 ** UI
 *** Simplicity
 For a simpler UI:
 #+BEGIN_SRC emacs-lisp
-  (fringe-mode 0)
-  (scroll-bar-mode -1)
-  (tool-bar-mode -1)
+  (when window-system
+    (fringe-mode 0)
+    (scroll-bar-mode -1)
+    (tool-bar-mode -1))
   (menu-bar-mode -1)
 #+END_SRC
-Some of these might be best done with customize, since they only apply to the current window, otherwise.
+Some of these might be best done with customize, since they only apply to the current window.
+
+To make for a cleaner start screen
+#+BEGIN_SRC emacs-lisp
+  (when window-system
+    (setq inhibit-startup-screen t)
+    (setq initial-buffer-choice nil))
+#+END_SRC
 
 *** Power
-=(setq column-number-mode t)= will put the column in the mode line.
+- =(setq column-number-mode t)= will put the column in the mode line.
+- =linum-mode= and =global-linum-mode= show line numbers in the margin
 
-=linum-mode= and =global-linum-mode= show line numbers in the margin
-
-** Usability
+** Other
 *** Ido
 Info: http://emacswiki.org/emacs/InteractivelyDoThings
 
@@ -68,11 +97,16 @@ Like Ido, but better?
 *** Tweaks
 Emacs is old and different. Here are some changes to make it feel more modern.
 
-=(set-default 'cursor-type 'bar)= for a familiar, bar-style cursor.
-
-=(pending-delete-mode 1)= makes it so backspace/delete remove selected region, and trying to insert with a region overwrites the region (basically, what you expect).
-
-=(setq scroll-conservatively 10000)= makes scrolling a little less jumpy.
+- =(set-default 'cursor-type 'bar)= for a familiar, bar-style cursor.
+- =(pending-delete-mode 1)= makes it so backspace/delete remove selected region, and =(delete-selection-mode 1)= makes it so typing with a selection overwrites the selected text.
+- =(setq scroll-conservatively 10000)= makes scrolling a little less jumpy.
+- =(setq ring-bell-function (lambda () (progn)))= shut the bell up.
+- Make right clicking a misspelled word do what you would think (bring up suggestions)
+  #+BEGIN_SRC emacs-lisp
+    (eval-after-load "flyspell"
+      '(define-key flyspell-mode-map [down-mouse-3] 'flyspell-correct-word))
+  #+END_SRC
+- =(setq tramp-default-method "ssh")= to make Tramp use SSH by default (faster than scp)
 
 *** Mouse
 In terminal emacs, mouse support is off by default. This enables it and adds nice scrolling.
@@ -97,3 +131,31 @@ In terminal emacs, mouse support is off by default. This enables it and adds nic
     (global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll 3 -1)))
     )
 #+END_SRC
+* Great Modes
+** Major Modes
+*** Org Mode
+Info: http://orgmode.org/
+
+All purpose mode for note taking, structured document authoring, planning, todos, etc.
+
+*** Artist Mode
+Info: http://www.emacswiki.org/emacs/ArtistMode
+
+Draw stuff! Woo ascii art!
+
+*** Hexl Mode
+Info: http://www.emacswiki.org/emacs/HexlMode
+
+Make Emacs into a hex editor.
+
+** Minor Modes
+*** WhiteSpace Mode
+Info: http://emacswiki.org/emacs/WhiteSpace
+
+Visualize white space and white space errors.
+
+*** Auto Fill Mode
+Break long lines automatically.
+
+*** Visual Line Mode
+Wrap long lines.
