@@ -79,6 +79,7 @@
     (setq initial-buffer-choice nil)
 
     ;; Set theme -- This looks ugly on terminal, so only use for gui
+    (require-package 'color-theme-solarized)
     (load-theme 'solarized-dark t)
 
     )
@@ -130,6 +131,8 @@
 ;; Org mode
 
 (defun set-org-mode-options ()
+  (require-package 'org)
+
   ;; visual-line and org-indent
   (add-hook 'org-mode-hook 'visual-line-mode)
   (add-hook 'org-mode-hook 'org-indent-mode)
@@ -166,6 +169,8 @@ current directory in Python's search path."
 ;; Haskell
 
 (defun set-haskell-options ()
+  (require-package 'haskell-mode)
+
   (eval-after-load 'auto-complete
     '(progn
        (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/"))
@@ -216,6 +221,8 @@ current directory in Python's search path."
 ;; LaTeX
 
 (defun set-latex-options ()
+  (require-package 'auctex)
+
   (setq LaTeX-command "pdflatex")
 
   (add-hook 'LaTeX-mode-hook 'visual-line-mode)
@@ -266,7 +273,9 @@ current directory in Python's search path."
     (when window-system
       ;; Enable menubar again (full screen button needs it?!?)
       (menu-bar-mode 1)
+
       ;; We are running a guifull emacs! Fix our path.
+      (require-package 'exec-path-from-shell)
       (exec-path-from-shell-initialize)
       )
 
@@ -326,6 +335,7 @@ current directory in Python's search path."
 ;; Autocomplete
 
 (defun set-autocomplete-options ()
+  (require-package 'auto-complete)
   (require 'auto-complete-config)
   (ac-config-default)
   (ac-flyspell-workaround)
@@ -335,17 +345,23 @@ current directory in Python's search path."
 ;; Package management
 
 (defvar needed-packages
-  '(auctex auto-complete flymake flymake-cursor
-           haskell-mode org rainbow-mode undo-tree magit
-           color-theme-solarized exec-path-from-shell))
+  '(undo-tree magit)
+  "The list of packages that are required."
+  )
+
+(defun require-package (&rest rest-var)
+  "Indicate that a package is required."
+  (dolist (p rest-var)
+    (if (not (package-installed-p p))
+        (progn
+          (package-install p)
+          (setq needed-packages (cons p needed-packages)))
+      (progn
+        (add-to-list 'needed-packages p))))
+  )
 
 (defun install-packages ()
-  (message "%s" "Packages missing. Refreshing...")
-
   (package-refresh-contents)
-
-  (message "%s" "done. Installing...")
-
   (dolist (p needed-packages)
     (when (not (package-installed-p p))
       (package-install p)))
@@ -372,6 +388,13 @@ current directory in Python's search path."
   ;; What does this do?
   ;(package-menu--find-upgrades)
 
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Flymake options
+
+(defun set-flymake-options ()
+  (require-package 'flymake 'flymake-cursor)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -403,6 +426,7 @@ current directory in Python's search path."
   (set-autocomplete-options)
   (set-whitespace-options)
   (set-flyspell-options)
+  (set-flymake-options)
 
   ; Major
   (set-org-mode-options)
