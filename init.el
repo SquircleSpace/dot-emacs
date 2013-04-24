@@ -13,9 +13,6 @@
   ; Flash
   ;(setq visible-bell t)
 
-  ;; iswitch-buffer is the best
-  ;(iswitchb-mode)
-
   ;; Bar cursor
   (set-default 'cursor-type 'bar)
 
