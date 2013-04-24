@@ -1,0 +1,99 @@
+#+TITLE: Tricks
+
+It is easy to forget magic tricks.
+
+* Programming
+** Navigation
+*** Tags
+Info: http://www.gnu.org/software/emacs/manual/html_node/emacs/Tags.html
+
+Tags helps you jump right to functions and such
+
+** Reading
+*** Glasses Mode
+Info: http://www.gnu.org/software/emacs/manual/html_node/emacs/Glasses.html
+
+Glasses mode turns =camelCase= into =camel_Case= but ONLY in emacs -- the file still contains =camelCase=.
+
+** Writing
+*** Auto Complete
+Info: http://emacswiki.org/emacs/AutoComplete
+
+Auto Complete is a fairly robust completion engine with support for various backends. By default, it includes words from buffers with the same format, but you can do more sophisticated things. For example, ask a compiler for suggestions.
+
+If you use Auto Complete and Fly Spell, make sure you =(ac-flyspell-workaround)=.
+
+*** Fly Spell
+Info: http://www.emacswiki.org/emacs/FlySpell
+
+=fly-spell-prog-mode= checks spelling of comments and strings.
+
+** Version Control
+*** Magit
+Info: http://philjackson.github.io/magit/magit.html
+
+Magit is a visual interface to git. It is very magic.
+
+*** Ediff
+Info: http://www.gnu.org/software/emacs/manual/html_mono/ediff.html
+
+Ediff is a mode/program for generating and viewing diffs. It is easier to use/read than a raw diff. It is also very powerful and has great features like modifying the diff and diffing word-by-word.
+* Global
+** UI
+*** Simplicity
+For a simpler UI:
+#+BEGIN_SRC emacs-lisp
+  (fringe-mode 0)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+#+END_SRC
+Some of these might be best done with customize, since they only apply to the current window, otherwise.
+
+*** Power
+=(setq column-number-mode t)= will put the column in the mode line.
+
+=linum-mode= and =global-linum-mode= show line numbers in the margin
+
+** Usability
+*** Ido
+Info: http://emacswiki.org/emacs/InteractivelyDoThings
+
+Ido makes switching buffers, finding files, etc. really easy. Fuzzy matching is great.
+
+*** Icicles
+Info: http://emacswiki.org/emacs/Icicles
+
+Like Ido, but better?
+*** Tweaks
+Emacs is old and different. Here are some changes to make it feel more modern.
+
+=(set-default 'cursor-type 'bar)= for a familiar, bar-style cursor.
+
+=(pending-delete-mode 1)= makes it so backspace/delete remove selected region, and trying to insert with a region overwrites the region (basically, what you expect).
+
+=(setq scroll-conservatively 10000)= makes scrolling a little less jumpy.
+
+*** Mouse
+In terminal emacs, mouse support is off by default. This enables it and adds nice scrolling.
+#+BEGIN_SRC emacs-lisp
+  (unless window-system
+    ;; Enable mouse support
+    (require 'mouse)
+    (xterm-mouse-mode t)
+    (defun track-mouse (e))
+    (setq mouse-sel-mode t)
+  
+    ;; Mouse scrolling
+    (defun smooth-scroll (number-lines increment)
+      (if (= 0 number-lines)
+          t
+        (progn
+          (sit-for 0.02)
+          (scroll-up increment)
+          (smooth-scroll (- number-lines 1) increment))))
+  
+    (global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 3 1)))
+    (global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll 3 -1)))
+    )
+#+END_SRC
