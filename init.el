@@ -3,6 +3,10 @@
 
 (defun set-global-options ()
 
+  ;; Don't polute everything with backups
+  (setq backup-directory-alist
+        `(("." . ,(concat user-emacs-directory "backups/"))))
+
   ;; No bell
   ; Do nothing
   (setq ring-bell-function (lambda () (progn)))
