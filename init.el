@@ -346,7 +346,7 @@ current directory in Python's search path."
 ;; Package management
 
 (defvar needed-packages
-  '(undo-tree magit)
+  '(undo-tree)
   "The list of packages that are required."
   )
 
@@ -408,6 +408,16 @@ current directory in Python's search path."
     '(define-key flyspell-mode-map [down-mouse-3] 'flyspell-correct-word)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Magit options
+
+(defun set-magit-options ()
+
+  (require-package 'magit)
+  (global-set-key (kbd "C-c s") 'magit-status)
+
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Apply options
 
 (defun set-all-options ()
@@ -438,6 +448,9 @@ current directory in Python's search path."
   (set-matlab-options)
   (set-c++-options)
   (set-shell-options)
+
+  ;; Utility
+  (set-magit-options)
 
   ;; Load machine specific options
   (set-machine-options)
