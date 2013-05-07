@@ -38,6 +38,12 @@
 
   ;; Make scrolling in docview mode continuous
   (setq doc-view-continuous t)
+
+  ;; Support unfill
+  (require-package 'unfill)
+
+  ;; Undo tree
+  (require-package 'undo-tree)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
