@@ -30,10 +30,8 @@
 
 ;; Apply options
 
-(if (< emacs-major-version 24)
-    (progn
-      (error "This version of emacs is as old as dirt."))
-  )
+(when (< emacs-major-version 24)
+  (error "This version of emacs is as old as dirt."))
 
 (add-to-list 'load-path "~/.emacs.d/config/")
 
