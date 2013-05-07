@@ -1,5 +1,3 @@
-(require 'package-config)
-
 (defun set-magit-options ()
 
   (require-package 'magit)

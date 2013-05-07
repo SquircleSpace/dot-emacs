@@ -1,5 +1,3 @@
-(require 'package-config)
-
 (defun set-flymake-options ()
   (require-package 'flymake 'flymake-cursor 'auto-complete-clang-async)
 

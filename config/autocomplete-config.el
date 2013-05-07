@@ -1,5 +1,3 @@
-(require 'package-config)
-
 (defun set-autocomplete-options ()
   (require-package 'auto-complete)
   ; Unfortunately, this package doesn't include the binary we need.

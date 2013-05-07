@@ -1,5 +1,3 @@
-(require 'package-config)
-
 (defun set-ido-options ()
   (require-package 'ido)
 

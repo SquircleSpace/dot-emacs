@@ -1,5 +1,3 @@
-(require 'package-config)
-
 (defun set-ecb-options ()
   (require-package 'ecb)
 

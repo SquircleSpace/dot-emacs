@@ -1,5 +1,3 @@
-(require 'package-config)
-
 (defun set-haskell-options ()
   (require-package 'haskell-mode)
 

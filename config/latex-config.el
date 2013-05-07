@@ -1,5 +1,3 @@
-(require 'package-config)
-
 (defun set-latex-options ()
   (require-package 'auctex)
 
