@@ -1,17 +1,8 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Misc
-
 (defun set-misc-options ()
 
   ;; Don't polute everything with backups
   (setq backup-directory-alist
         `(("." . ,(concat user-emacs-directory "backups/"))))
-
-  ;; No bell
-  ; Do nothing
-  (setq ring-bell-function (lambda () (progn)))
-  ; Flash
-  ;(setq visible-bell t)
 
   ;; Always add new line
   (setq require-final-newline t)
@@ -19,15 +10,6 @@
   ;; No tab characters
   (setq-default indent-tabs-mode nil)
   (setq tab-width 4)
-
-  ;; Delete selected text
-  (pending-delete-mode 1)
-
-  ;; Overwrite selected text
-  (delete-selection-mode 1)
-
-  ;; Don't jump when cursor goes out of screen
-  (setq scroll-conservatively 10000)
 
   ;; Fix shift up
   (defadvice terminal-init-xterm (after select-shift-up activate)
@@ -46,7 +28,6 @@
   (require-package 'undo-tree)
   )
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Apply options
 
 (if (< emacs-major-version 24)
@@ -79,5 +60,5 @@
 
 (require 'mouse-config)
 
-(require 'gui-config)
+(require 'ui-config)
 (require 'system-config) ; must be last

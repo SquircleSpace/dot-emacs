@@ -1,4 +1,4 @@
-(defun set-gui-options ()
+(defun set-ui-options ()
   ;; Bar cursor
   (set-default 'cursor-type 'bar)
 
@@ -27,8 +27,24 @@
     (tool-bar-mode 0)
 
     )
+
+  ;; No bell
+  ; Do nothing
+  (setq ring-bell-function (lambda () (progn)))
+  ; Flash
+  ;(setq visible-bell t)
+
+  ;; Don't jump when cursor goes out of screen
+  (setq scroll-conservatively 10000)
+
+  ;; Delete selected text
+  (pending-delete-mode 1)
+
+  ;; Overwrite selected text
+  (delete-selection-mode 1)
+
   )
 
-(set-gui-options)
+(set-ui-options)
 
-(provide 'gui-config)
+(provide 'ui-config)
