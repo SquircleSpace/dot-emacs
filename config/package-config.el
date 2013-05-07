@@ -1,13 +1,21 @@
 (defvar needed-packages
-  '(undo-tree)
+  (list)
   "The list of packages that are required."
   )
 
+(defvar package-refreshed
+  nil
+  "Whether we have refreshed the package listing in this execution.")
+
 (defun require-package (&rest rest-var)
   "Indicate that a package is required."
+  
   (dolist (p rest-var)
     (if (not (package-installed-p p))
         (progn
+          (unless package-refreshed
+            (package-refresh-contents)
+            (setq package-refreshed t))
           (package-install p)
           (setq needed-packages (cons p needed-packages)))
       (progn
@@ -15,7 +23,10 @@
   )
 
 (defun install-packages ()
-  (package-refresh-contents)
+  (unless package-refreshed
+    (package-refresh-contents)
+    (setq package-refreshed t)
+    )
   (dolist (p needed-packages)
     (when (not (package-installed-p p))
       (package-install p)))
