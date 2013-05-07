@@ -61,13 +61,13 @@
 (set-misc-options)
 
 (require 'grader-config)
-(require 'matlab-config)
 (require 'shell-config)
 (require 'org-config)
 (require 'latex-config)
 (require 'python-config)
 (require 'haskell-config)
 (require 'c++-config)
+(require 'objc-config)
 
 (require 'whitespace-config)
 (require 'autocomplete-config)
