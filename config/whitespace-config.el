@@ -11,10 +11,10 @@
   (setq whitespace-action '(auto-cleanup))
 
   ;; Start up whitespace mode when it makes sense
-  (add-hook 'python-mode-hook 'whitespace-mode)
-  (add-hook 'haskell-mode-hook 'whitespace-mode)
-
-  (add-hook 'c-mode-common-hook 'whitespace-mode)
+  (let ((hooks '(emacs-lisp-mode-hook python-mode-hook haskell-mode-hook
+                 c-mode-common-hook java-mode-hook)))
+    (dolist (hook hooks)
+      (add-hook hook 'whitespace-mode)))
   )
 
 (set-whitespace-options)
