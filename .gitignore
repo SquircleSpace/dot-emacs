@@ -8,6 +8,7 @@ url/cookies
 
 elpa
 *.elc
+*.o
 
 # Temporary files
 *~
