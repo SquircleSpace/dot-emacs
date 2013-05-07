@@ -1,10 +1,13 @@
 (defun set-flymake-options ()
   (require-package 'flymake 'flymake-cursor 'auto-complete-clang-async)
-
   (require 'auto-complete-clang-async)
   (require 'flymake)
+
+  (setq flymake-no-changes-timeout 5.0) ; Don't bother me while typing.
+
   (push '("\\.\\(?:c\\(?:xx\\|pp\\|\\+\\+\\)?\\|CC\\|h\\|hpp\\|m\\)\\'"
-          ac-clang-syntax-check)
+          (lambda () (ac-clang-launch-completion-process)
+            (ac-clang-syntax-check)))
         flymake-allowed-file-name-masks)
 
   ;; Start up flymake mode when it makes sense
