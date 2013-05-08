@@ -1,5 +1,8 @@
 (defun set-ido-options ()
-  (require-package 'ido)
+  (require-package 'ido 'ido-ubiquitous 'ido-yes-or-no)
+  (require 'ido)
+  (require 'ido-ubiquitous)
+  (require 'ido-yes-or-no)
 
   ; Turn on ido
   (ido-mode)
@@ -9,6 +12,8 @@
 
   ; More ido is more better
   (ido-everywhere)
+  (ido-ubiquitous-mode)
+  (ido-yes-or-no-mode)
 
   )
 
