@@ -14,7 +14,7 @@
   ;; Setup clang-async
   (defun ac-cc-mode-setup ()
     (yas-minor-mode-on) ; Strange things happen if yas-minor-mode isn't on
-    (setq ac-sources '(ac-source-clang-async)) ; We only need clang-async
+    (setq ac-sources '(ac-source-clang-async ac-source-yasnippet))
     (ac-clang-launch-completion-process)) ; Need to explicitly launch process
 
   ;; Tell clang-async where to look for clang-complete
@@ -26,7 +26,7 @@
                    "~/.emacs.d/config/autocomplete-config/")
     (unless (file-exists-p ac-clang-complete-executable)
       (error "Couldn't build clang-complete")))
-    
+
   (add-to-list 'ac-sources 'ac-source-clang-async)
   (add-hook 'c-mode-common-hook 'ac-cc-mode-setup)
   (add-hook 'objc-mode-hook 'ac-cc-mode-setup)
