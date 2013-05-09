@@ -12,7 +12,7 @@
 
   ;; Start up whitespace mode when it makes sense
   (let ((hooks '(emacs-lisp-mode-hook python-mode-hook haskell-mode-hook
-                 c-mode-common-hook java-mode-hook)))
+                 c-mode-hook c++-mode-hook java-mode-hook)))
     (dolist (hook hooks)
       (add-hook hook 'whitespace-mode)))
   )
