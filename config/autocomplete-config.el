@@ -10,6 +10,7 @@
   ;; Initalize autocomplete
   (ac-config-default)
   (ac-flyspell-workaround)
+  (ac-linum-workaround)
 
   ;; Setup clang-async
   (defun ac-cc-mode-setup ()
