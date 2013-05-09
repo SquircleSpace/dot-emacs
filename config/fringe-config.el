@@ -1,9 +1,11 @@
 (defun set-fringe-options ()
   ;; Get a very small right fringe
-  (set-fringe-mode '(0 . 1))
+  (set-fringe-mode '(0 . 5))
   ;; Put useful things in it
   (setq-default indicate-buffer-boundaries 'right)
   (setq-default indicate-empty-lines t)
+  (setq flymake-fringe-indicator-position 'right-fringe)
+  (setq visual-line-fringe-indicators '(nil right-curly-arrow))
   ;; We don't need to indicate empty lines in whitespace mode anymore
   (setq whitespace-style (delete 'empty whitespace-style))
 
