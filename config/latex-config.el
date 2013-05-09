@@ -1,9 +1,11 @@
 (defun set-latex-options ()
   (require-package 'auctex)
+  (require-package 'adaptive-wrap)
 
   (setq LaTeX-command "pdflatex")
 
   (add-hook 'LaTeX-mode-hook 'visual-line-mode)
+  (add-hook 'LaTeX-mode-hook 'adaptive-wrap-prefix-mode)
 
   (when (eq system-type 'darwin)
     ;; Make auctex do the right thing with open.
