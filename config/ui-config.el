@@ -19,8 +19,10 @@
     ;; Default buffer
     (setq inhibit-startup-screen t)
     (setq initial-buffer-choice nil)
-    
-    (set-fringe-mode 0)
+
+    ;; No fringe... unless they wanted one.
+    (unless (featurep 'fringe-config)
+      (set-fringe-mode 0))
 
     (set-scroll-bar-mode nil)
 

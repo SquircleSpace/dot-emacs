@@ -59,4 +59,5 @@
 (require 'mouse-config)
 
 (require 'ui-config)
+(require 'fringe-config)
 (require 'system-config) ; must be last
