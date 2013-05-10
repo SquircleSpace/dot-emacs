@@ -6,7 +6,9 @@
   (setq flymake-no-changes-timeout 5.0) ; Don't bother me while typing.
 
   (push '("\\.\\(?:c\\(?:xx\\|pp\\|\\+\\+\\)?\\|CC\\|h\\|hpp\\|m\\)\\'"
-          (lambda () (ac-clang-launch-completion-process)
+          (lambda ()
+            (unless ac-clang-completion-process
+              (ac-clang-launch-completion-process))
             (ac-clang-syntax-check)))
         flymake-allowed-file-name-masks)
 

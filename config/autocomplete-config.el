@@ -16,7 +16,8 @@
   (defun ac-cc-mode-setup ()
     (yas-minor-mode-on) ; Strange things happen if yas-minor-mode isn't on
     (setq ac-sources '(ac-source-clang-async ac-source-yasnippet))
-    (ac-clang-launch-completion-process)) ; Need to explicitly launch process
+    (unless ac-clang-completion-process
+      (ac-clang-launch-completion-process))) ; Need to explicitly launch process
 
   ;; Tell clang-async where to look for clang-complete
   (setq ac-clang-complete-executable
