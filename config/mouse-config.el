@@ -16,8 +16,8 @@
           (scroll-up increment)
           (smooth-scroll (- number-lines 1) increment))))
 
-    (global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 3 1)))
-    (global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll 3 -1)))
+    (global-set-key [(mouse-5)] (lambda () (interactive) (smooth-scroll 3 1)))
+    (global-set-key [(mouse-4)] (lambda () (interactive) (smooth-scroll 3 -1)))
     )
   )
 

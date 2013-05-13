@@ -1,17 +1,17 @@
 (defun set-shell-options ()
   ;; Make ehsell have case insensitive tab complete
   (add-hook 'eshell-mode-hook
-            '(lambda ()
-               (setq pcomplete-ignore-case t)))
+            (lambda ()
+              (setq pcomplete-ignore-case t)))
 
   ;; Make shell output read only
   (add-hook
    'comint-output-filter-functions
-   '(lambda (string)
-      ;; Need to inhibit read only to re-read-onlyify everything
-      (let ((inhibit-read-only t))
-        (add-text-properties (point-min) (point-max)
-                             '(read-only t front-sticky (read-only))))))
+   (lambda (string)
+     ;; Need to inhibit read only to re-read-onlyify everything
+     (let ((inhibit-read-only t))
+       (add-text-properties (point-min) (point-max)
+                            '(read-only t front-sticky (read-only))))))
 
   ; Use colors
   (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)

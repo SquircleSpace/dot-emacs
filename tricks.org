@@ -127,8 +127,8 @@ In terminal emacs, mouse support is off by default. This enables it and adds nic
           (scroll-up increment)
           (smooth-scroll (- number-lines 1) increment))))
   
-    (global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 3 1)))
-    (global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll 3 -1)))
+    (global-set-key [(mouse-5)] (lambda () (interactive) (smooth-scroll 3 1)))
+    (global-set-key [(mouse-4)] (lambda () (interactive) (smooth-scroll 3 -1)))
     )
 #+END_SRC
 * Great Modes
