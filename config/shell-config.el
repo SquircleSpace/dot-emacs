@@ -24,11 +24,11 @@
 
   ; Don't allow changing shell prompt
   (setq comint-prompt-read-only t)
-  
+
   ; Input always goes to the prompt
   (setq comint-scroll-to-bottom-on-input 'this)
   (setq eshell-scroll-to-bottom-on-input 'this)
-  
+
   ; No welcome message when launching eshell
   (setq eshell-banner-message "")
   )
