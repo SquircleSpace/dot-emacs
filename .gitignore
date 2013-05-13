@@ -5,6 +5,7 @@ ac-comphist.dat
 eshell
 .DS_Store
 url/cookies
+cache/docsets
 
 elpa
 *.elc

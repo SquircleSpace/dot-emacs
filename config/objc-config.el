@@ -17,6 +17,13 @@
   (require 'flymake-config)
   (require-package 'adaptive-wrap)
 
+  (add-to-list 'load-path "~/.emacs.d/elisp/")
+  (require 'docsetutil)
+  (require 'w3m)
+  (setq docsetutil-program
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/docsetutil")
+  (setq docsetutil-browse-url-function 'w3m-browse-url)
+
   (add-hook 'objc-mode-hook 'visual-line-mode)
   (add-hook 'objc-mode-hook 'adaptive-wrap-prefix-mode)
   (add-hook 'objc-mode-hook (lambda ()
@@ -26,6 +33,7 @@
   ;; Add keyboard shortcuts
   (add-hook 'objc-mode-hook
             (lambda ()
+              (define-key objc-mode-map (kbd "C-c d") 'docsetutil-search)
               (define-key objc-mode-map (kbd "C-c o") 'ff-find-other-file)
               (define-key objc-mode-map (kbd "C-c h") 'objc-headline)))
 
