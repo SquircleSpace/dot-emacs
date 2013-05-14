@@ -1,9 +1,7 @@
 (defun set-machine-options ()
-
-  ;; Detect system
-  ; Mac
+  ;; OS-specific changes
   (when (eq system-type 'darwin)
-    ;; keyboard stuff
+    ;; keyboard shortcuts
     (setq mac-command-modifier (quote super))
     (setq mac-option-modifier (quote meta))
     (global-set-key [(super a)] 'mark-whole-buffer)
@@ -19,25 +17,24 @@
     (global-set-key [(super z)] 'undo)
 
     (when window-system
-      ;; Enable menubar again (full screen button needs it?!?)
-      (menu-bar-mode 1)
-
       ;; We are running a guifull emacs! Fix our path.
       (require-package 'exec-path-from-shell)
       (let ((old-exec exec-path))
         (exec-path-from-shell-initialize)
-        (setq exec-path (append exec-path old-exec))
-	)
-      )
-    )
+        (setq exec-path (append exec-path old-exec))))))
+
+(defun set-machine-options-post-init ()
+  ;; OS-specific changes
+  (when (and (eq system-type 'darwin)
+             window-system)
+    ;; Enable menubar again (full screen button needs it?!?)
+    (menu-bar-mode 1))
 
   ;; Check if the extra elisp file exists
   (if (file-exists-p "~/.emacs.d/machine.el")
-      (add-hook 'after-init-hook
-                (lambda ()
-                  (load "~/.emacs.d/machine.el"))))
-  )
+      (load "~/.emacs.d/machine.el")))
 
 (set-machine-options)
+(add-hook 'after-init-hook 'set-machine-options-post-init)
 
 (provide 'system-config)
