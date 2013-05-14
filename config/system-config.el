@@ -33,8 +33,9 @@
 
   ;; Check if the extra elisp file exists
   (if (file-exists-p "~/.emacs.d/machine.el")
-      (load "~/.emacs.d/machine.el")
-    )
+      (add-hook 'after-init-hook
+                (lambda ()
+                  (load "~/.emacs.d/machine.el"))))
   )
 
 (set-machine-options)

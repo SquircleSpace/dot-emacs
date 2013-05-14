@@ -36,6 +36,7 @@
 (add-to-list 'load-path "~/.emacs.d/config/")
 
 (require 'package-config)
+(require 'system-config) ; Should come early
 
 (set-misc-options)
 
@@ -60,4 +61,3 @@
 
 (require 'ui-config)
 (require 'fringe-config)
-(require 'system-config) ; must be last
