@@ -1,21 +1,25 @@
 (defun set-flymake-options ()
-  (require-package 'flymake 'flymake-cursor 'auto-complete-clang-async)
-  (require 'auto-complete-clang-async)
-  (require 'flymake)
+  (require-package 'flymake 'flymake-cursor)
 
-  (setq flymake-no-changes-timeout 5.0) ; Don't bother me while typing.
+  ;; Configure flymake
+  (eval-after-load 'flymake
+    '(setq flymake-no-changes-timeout 5.0)) ; Don't bother me while typing.
 
-  (push '("\\.\\(?:c\\(?:xx\\|pp\\|\\+\\+\\)?\\|CC\\|h\\|hpp\\|m\\)\\'"
-          (lambda ()
-            (unless ac-clang-completion-process
-              (ac-clang-launch-completion-process))
-            (ac-clang-syntax-check)))
-        flymake-allowed-file-name-masks)
+  ;; Setup flymake for c modes
+  (eval-after-load 'cc-mode
+    '(progn
+       (require-package 'auto-complete-clang-async)
+       (require 'auto-complete-clang-async)
 
-  ;; Start up flymake mode when it makes sense
-  (let ((modes '(c-mode-common-hook)))
-    (dolist (mode modes)
-      (add-hook mode 'flymake-mode)))
+       ; Claim to support c files
+       (push '("\\.\\(?:c\\(?:xx\\|pp\\|\\+\\+\\)?\\|CC\\|h\\|hpp\\|mm?\\)\\'"
+               (lambda ()
+                 (unless ac-clang-completion-process
+                   (ac-clang-launch-completion-process))
+                 (ac-clang-syntax-check)))
+             flymake-allowed-file-name-masks)
+
+       (add-hook 'c-mode-common-hook 'flymake-mode)))
   )
 
 (set-flymake-options)
