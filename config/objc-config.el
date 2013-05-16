@@ -67,10 +67,10 @@
   (require 'autocomplete-config)
   (require 'flymake-config)
   (require-package 'adaptive-wrap)
+  (require-package 'w3m)
 
   (add-to-list 'load-path "~/.emacs.d/elisp/")
   (require 'docsetutil)
-  (require 'w3m)
   (setq docsetutil-program
         "/Applications/Xcode.app/Contents/Developer/usr/bin/docsetutil")
   (setq docsetutil-browse-url-function 'w3m-browse-url)
