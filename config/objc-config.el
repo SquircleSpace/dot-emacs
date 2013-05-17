@@ -63,6 +63,12 @@ selector near point."
     (let ((name (get-objc-selector)))
       (docsetutil-search name)))
 
+  (defun search-objc-name ()
+    "Search the documentation for the word under point."
+    (interactive)
+    (docsetutil-search (thing-at-point 'symbol))
+    )
+
   (defvar anything-c-source-objc-headline
     '((name . "Objective-C Headline")
       (headline . "^[ \t]*[-+@]\\|^#pragma[ \t]+mark")))
@@ -158,6 +164,7 @@ status and no errors."
   (add-hook 'objc-mode-hook
             (lambda ()
               (define-key objc-mode-map (kbd "C-c s") 'search-objc-selector)
+              (define-key objc-mode-map (kbd "C-c f") 'search-objc-name)
               (define-key objc-mode-map (kbd "C-c d") 'docsetutil-search)
               (define-key objc-mode-map (kbd "C-c o") 'ff-find-other-file)
               (define-key objc-mode-map (kbd "C-c b") 'objc-xcode-build)
