@@ -2,8 +2,7 @@
   (require-package 'anything)
   (require 'anything)
   ;; Anything-config changes w3m-command rudely. Stop it.
-  (let ((w3m-command nil))
-    (require 'anything-config))
+  (with-no-warnings (let ((w3m-command nil)) (require 'anything-config)))
 
   (defun get-objc-selector-raw ()
     "Get the characters that are direct residents of the selector's braces.
