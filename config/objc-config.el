@@ -1,6 +1,9 @@
 (defun set-objc-options ()
   (require-package 'anything)
   (require 'anything)
+  ;; Anything-config changes w3m-command rudely. Stop it.
+  (let ((w3m-command nil))
+    (require 'anything-config))
 
   (defun get-objc-selector-raw ()
     "Get the characters that are direct residents of the selector's braces.
@@ -71,14 +74,15 @@ selector near point."
 
   (defvar anything-c-source-objc-headline
     '((name . "Objective-C Headline")
-      (headline . "^[ \t]*[-+@]\\|^#pragma[ \t]+mark")))
+      (headline . "^[ \t]*[-+@]\\|^#pragma[ \t]+mark"))
+    "Configuration for Objective-C headline.")
 
   (defun objc-headline ()
     "Produce a list of all selectors and #pragma marks defined in buffer."
     (interactive)
     (let ((anything-candidate-number-limit 500))
       (anything-other-buffer '(anything-c-source-objc-headline)
-                             "*ObjC Headline")))
+                             "*ObjC Headline*")))
 
   (defun objc-xcode-build ()
     "Attempt to build the project."
