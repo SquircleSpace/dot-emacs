@@ -12,7 +12,7 @@
        (require 'auto-complete-clang-async)
 
        ; Claim to support c files
-       (push '("\\.\\(?:c\\(?:xx\\|pp\\|\\+\\+\\)?\\|CC\\|h\\|hpp\\|mm?\\)\\'"
+       (push '("\\.\\(?:c\\(?:xx\\|pp\\|\\+\\+\\)?\\|CC\\|h\\|hpp\\)\\'"
                (lambda ()
                  (unless ac-clang-completion-process
                    (ac-clang-launch-completion-process))
