@@ -163,7 +163,7 @@ status and no errors."
   ;; Add keyboard shortcuts
   (add-hook 'objc-mode-hook
             (lambda ()
-              (define-key objc-mode-map (kbd "C-c s") 'search-objc-selector)
+              (define-key objc-mode-map (kbd "C-c m") 'search-objc-selector)
               (define-key objc-mode-map (kbd "C-c f") 'search-objc-name)
               (define-key objc-mode-map (kbd "C-c d") 'docsetutil-search)
               (define-key objc-mode-map (kbd "C-c o") 'ff-find-other-file)
