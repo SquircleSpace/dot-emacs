@@ -1,4 +1,6 @@
 (defun set-objc-options ()
+  (require 'c-config)
+
   (require-package 'anything)
   (require 'anything)
   ;; Anything-config changes w3m-command rudely. Stop it.
@@ -148,7 +150,6 @@ status and no errors."
 
   (require 'autocomplete-config)
   (require 'flymake-config)
-  (require-package 'adaptive-wrap)
   (require-package 'w3m)
 
   (add-to-list 'load-path "~/.emacs.d/elisp/")
@@ -157,10 +158,6 @@ status and no errors."
         "/Applications/Xcode.app/Contents/Developer/usr/bin/docsetutil")
   (setq docsetutil-browse-url-function 'w3m-browse-url)
 
-  (add-hook 'objc-mode-hook 'visual-line-mode)
-  (add-hook 'objc-mode-hook 'adaptive-wrap-prefix-mode)
-  (add-hook 'objc-mode-hook (lambda ()
-                              (setq adaptive-wrap-extra-indent 4)))
   (add-to-list 'ac-modes 'objc-mode)
 
   ;; Add keyboard shortcuts

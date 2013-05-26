@@ -1,12 +1,6 @@
 (defun set-c++-options ()
-  ;; Set C++ style
-  (setq c-default-style
-    (quote
-     ((c-mode . "stroustrup")
-      (c++-mode . "stroustrup")
-      (java-mode . "java")
-      (awk-mode . "awk")
-      (other . "gnu"))))
-  )
+  (require 'c-config))
+
+(set-c++-options)
 
 (provide 'c++-config)
