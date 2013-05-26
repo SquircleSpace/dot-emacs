@@ -7,7 +7,8 @@
   (setq flymake-fringe-indicator-position 'right-fringe)
   (setq visual-line-fringe-indicators '(nil right-curly-arrow))
   ;; We don't need to indicate empty lines in whitespace mode anymore
-  (setq whitespace-style (delete 'empty whitespace-style))
+  (eval-after-load 'whitespace-config
+    '(setq whitespace-style (delete 'empty whitespace-style)))
 
   ;; By default, scrolling in fringes and margins is unbound. This is
   ;; silly. Make it do the sane thing and scroll like normal. Be
