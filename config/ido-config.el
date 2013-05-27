@@ -15,6 +15,10 @@
   (ido-ubiquitous-mode)
   (ido-yes-or-no-mode)
 
+  ; Make ido not do that annoying "search for recent files matching
+  ; what you typed" thing.
+  (setq ido-auto-merge-work-directories-length -1)
+
   )
 
 (set-ido-options)
