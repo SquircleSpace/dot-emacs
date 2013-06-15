@@ -9,7 +9,6 @@
 
   ;; No tab characters
   (setq-default indent-tabs-mode nil)
-  (setq tab-width 4)
 
   ;; Fix shift up
   (defadvice terminal-init-xterm (after select-shift-up activate)
