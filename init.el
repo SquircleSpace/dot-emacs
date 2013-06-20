@@ -39,22 +39,9 @@
 
 (set-misc-options)
 
-(require 'grader-config)
-(require 'shell-config)
-(require 'org-config)
-(require 'latex-config)
-(require 'python-config)
-(require 'haskell-config)
-(require 'c++-config)
-(require 'objc-config)
-
-(require 'autocomplete-config)
 (require 'flyspell-config)
-(require 'flymake-config)
 (require 'ido-config)
-
 (require 'magit-config)
-
 (require 'mouse-config)
 
 (require 'ui-config)
