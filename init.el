@@ -51,7 +51,7 @@
 (require 'autocomplete-config)
 (require 'flyspell-config)
 (require 'flymake-config)
-(require 'icicles-config)
+(require 'ido-config)
 
 (require 'magit-config)
 
