@@ -9,6 +9,7 @@
     (setq c-flymake-initalized t)
     (require-package 'auto-complete-clang-async)
     (require 'auto-complete-clang-async)
+    (require 'flymake-config)
 
     ;; Claim to support c files
     (push '("\\.\\(?:c\\(?:xx\\|pp\\|\\+\\+\\)?\\|CC\\|h\\|hpp\\)\\'"
@@ -23,11 +24,13 @@
 (defun init-c-autocomplete ()
   (unless c-autocomplete-initalized
     (setq c-autocomplete-initalized t)
+
     ;; Unfortunately, this package doesn't include the binary we need.
     (require-package 'auto-complete-clang-async)
     (require-package 'yasnippet)
     (require 'auto-complete-clang-async)
     (require 'yasnippet)
+    (require 'autocomplete-config)
 
     ;; Tell clang-async where to look for clang-complete
     (setq ac-clang-complete-executable
