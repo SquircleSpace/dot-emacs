@@ -52,7 +52,7 @@
 (require 'autocomplete-config)
 (require 'flyspell-config)
 (require 'flymake-config)
-(require 'ido-config)
+(require 'icicles-config)
 
 (require 'magit-config)
 
