@@ -1,0 +1,18 @@
+#+TITLE: dot-emacs
+#+AUTHOR: Brad Jensen
+
+The latest version of dot-emacs can be found at http://git.bradjensen.net:dot-emacs.git.
+
+* Configuration
+
+After cloning this repository, take a moment to peruse =/config/=. Inside, you will find several configuration files. Each is well commented and describes all the changes it makes. Some configuration files are fairly extensive and add new features (such as =/config/objc-config.el=) while others simply try to provide more modern / sane default settings.
+
+If you find one you like, open up =/init.el= and add =(require 'thing-config)= anywhere after =(require 'package-config)=. That's all! You're good to go!
+
+** =/machine.el=
+
+If the file =/machine.el= exists, it will be loaded after =/init.el= finishes. =/machine.el= is ignored by git. If you have several computers and intend to use Emacs on all of them, then =/machine.el= provides a way to customize Emacs on each machine individually without forking the repository.
+
+* Packages
+
+Some configuration files require packages that can be downloaded through Emacs 24's built in package manager. These packages will be downloaded when Emacs is launched or when they are first required.
