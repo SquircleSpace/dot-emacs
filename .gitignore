@@ -17,3 +17,7 @@ backups
 
 # machine config
 machine.el
+
+# Binary
+config/autocomplete-config/clang-complete
+config/autocomplete-config/src/dep
