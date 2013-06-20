@@ -15,7 +15,8 @@ current directory in Python's search path."
   (add-hook 'inferior-python-mode-hook
         'python-reinstate-current-directory)
 
-  )
+  (require 'flyspell-config)
+  (add-hook 'python-mode-hook 'flyspell-prog-mode))
 
 
 (set-python-options)

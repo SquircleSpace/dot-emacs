@@ -63,7 +63,10 @@
   (add-hook 'c-mode-common-hook (lambda ()
                                   (setq adaptive-wrap-extra-indent 4)))
   (add-hook 'c-mode-common-hook 'init-c-flymake)
-  (add-hook 'c-mode-common-hook 'init-c-autocomplete))
+  (add-hook 'c-mode-common-hook 'init-c-autocomplete)
+
+  (require 'flyspell-config)
+  (add-hook 'c-mode-common-hook 'flyspell-prog-mode))
 
 (set-c-options)
 

@@ -17,7 +17,9 @@
                   (output-dvi "Open")
                   (output-pdf "Open")
                   (output-html "Open")))))
-  )
+
+  (require 'flyspell-config)
+  (add-hook 'LaTeX-mode-hook 'flyspell-mode))
 
 (set-latex-options)
 

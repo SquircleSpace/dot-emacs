@@ -15,7 +15,11 @@
 
   ;; Set up flymake
   (require 'flymake-config)
-  (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load))
+  (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
+
+  ;; Set up flyspell
+  (require 'flyspell-config)
+  (add-hook 'haskell-mode-hook 'flyspell-prog-mode))
 
 (set-haskell-options)
 
