@@ -48,7 +48,6 @@
 (require 'c++-config)
 (require 'objc-config)
 
-(require 'whitespace-config)
 (require 'autocomplete-config)
 (require 'flyspell-config)
 (require 'flymake-config)
