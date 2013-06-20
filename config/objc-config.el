@@ -201,7 +201,10 @@ status and no errors."
 
     ;; Provide flymake support for Objective-C implementation files
     (push '("\\.mm?\\'" objc-xcode-flymake-init)
-          flymake-allowed-file-name-masks)))
+          flymake-allowed-file-name-masks)
+    ;; It is too late for flymake to automatically enable itself. We
+    ;; need to do it.
+    (flymake-mode)))
 
 (set-objc-options)
 
