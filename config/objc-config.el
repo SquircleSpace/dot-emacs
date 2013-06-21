@@ -5,6 +5,10 @@
   ;; Support .mm files
   (add-to-list 'auto-mode-alist '("\\.mm\\'" . objc-mode))
 
+  ;; Turn on auto-complete -- Configured in c-config.el
+  (require 'autocomplete-config)
+  (add-to-list 'ac-modes 'objc-mode)
+
   ;; Try to detect objecitve c headers
   (add-to-list 'magic-mode-alist
                `(,(lambda ()
@@ -182,8 +186,6 @@ status and no errors."
     (setq docsetutil-program
           "/Applications/Xcode.app/Contents/Developer/usr/bin/docsetutil")
     (setq docsetutil-browse-url-function 'w3m-browse-url)
-
-    (add-to-list 'ac-modes 'objc-mode)
 
     ;; Add keyboard shortcuts
     (define-key objc-mode-map (kbd "C-c m") 'search-objc-selector)

@@ -9,7 +9,6 @@
     (setq c-flymake-initalized t)
     (require-package 'auto-complete-clang-async)
     (require 'auto-complete-clang-async)
-    (require 'flymake-config)
 
     ;; Claim to support c files
     (push '("\\.\\(?:c\\(?:xx\\|pp\\|\\+\\+\\)?\\|CC\\|h\\|hpp\\)\\'"
@@ -44,7 +43,9 @@
 
   ;; Setup clang-async
   (yas-minor-mode-on) ; Strange things happen if yas-minor-mode isn't on
-  (setq ac-sources '(ac-source-clang-async ac-source-yasnippet))
+  ;; clang-async seems to hate being used with any other completion source
+  (setq ac-sources '(ac-source-clang-async))
+
   ;; Need to explicitly launch process
   (unless ac-clang-completion-process
     (ac-clang-launch-completion-process)))
@@ -65,7 +66,14 @@
   (add-hook 'c-mode-common-hook 'adaptive-wrap-prefix-mode)
   (add-hook 'c-mode-common-hook (lambda ()
                                   (setq adaptive-wrap-extra-indent 4)))
+
+  (require 'flymake-config)
   (add-hook 'c-mode-common-hook 'init-c-flymake)
+
+  ;; Set up autocomplete, but override default ac-cc-mode-setup.
+  (require 'autocomplete-config)
+  (defun ac-cc-mode-setup ())
+
   (add-hook 'c-mode-common-hook 'init-c-autocomplete)
 
   (require 'flyspell-config)
