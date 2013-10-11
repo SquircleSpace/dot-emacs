@@ -21,3 +21,6 @@ machine.el
 # Binary
 config/autocomplete-config/clang-complete
 config/autocomplete-config/src/dep
+
+# ido history
+ido.hist

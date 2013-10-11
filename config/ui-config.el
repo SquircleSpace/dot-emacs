@@ -5,6 +5,9 @@
   ;; Show Column numbers
   (setq column-number-mode t)
 
+  ;; Show file size
+  (size-indication-mode t)
+
   ;; No menu bar
   (menu-bar-mode -1)
 
