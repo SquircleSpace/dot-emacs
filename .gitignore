@@ -24,3 +24,6 @@ config/autocomplete-config/src/dep
 
 # ido history
 ido.hist
+
+# saved places
+saved-places

@@ -8,6 +8,9 @@
 (setq backup-directory-alist
       `(("." . ,(concat user-emacs-directory "backups/"))))
 
+;; Don't polute home directory with extra files, either
+(setq save-place-file (concat user-emacs-directory "saved-places"))
+
 ;; Always add new line
 (setq require-final-newline t)
 
