@@ -44,6 +44,7 @@
 (sp-use-paredit-bindings)
 (smartparens-global-mode +1)
 (show-smartparens-global-mode +1)
+(diminish 'smartparens-mode)
 
 ;; Better filenames name collisions
 (require 'uniquify)
