@@ -1,11 +1,9 @@
-(defun set-minimap-options ()
-  (require-package 'minimap)
+(require-package 'minimap)
 
+;; Minimap is sometimes-want feature. Only bother to do the settings
+;; if we want minimap!
+(eval-after-load 'minimap
   ;; Don't let other things steal the window
-  (eval-after-load 'minimap
-    '(setq minimap-dedicated-window t))
-  )
-
-(set-minmap-options)
+  '(setq minimap-dedicated-window t))
 
 (provide 'minimap-config)

@@ -1,11 +1,8 @@
-(defun set-icicles-options ()
-  (require-package 'icicles)
-  (require-package 'fuzzy-match)
+(require-package 'icicles)
+(require-package 'fuzzy-match)
 
-  (setq icicle-TAB-completion-methods '(fuzzy vanilla basic))
+(setq icicle-TAB-completion-methods '(fuzzy vanilla basic))
 
-  (icy-mode))
-
-(set-icicles-options)
+(icy-mode)
 
 (provide 'icicles-config)

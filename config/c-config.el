@@ -50,35 +50,32 @@
   (unless ac-clang-completion-process
     (ac-clang-launch-completion-process)))
 
-(defun set-c-options ()
 
-  (setq c-default-style
-        (quote
-         ((c-mode . "stroustrup")
-          (c++-mode . "stroustrup")
-          (java-mode . "java")
-          (awk-mode . "awk")
-          (other . "gnu"))))
+(setq c-default-style
+      (quote
+       ((c-mode . "stroustrup")
+        (c++-mode . "stroustrup")
+        (java-mode . "java")
+        (awk-mode . "awk")
+        (other . "gnu"))))
 
-  (require-package 'adaptive-wrap)
+(require-package 'adaptive-wrap)
 
-  (add-hook 'c-mode-common-hook 'visual-line-mode)
-  (add-hook 'c-mode-common-hook 'adaptive-wrap-prefix-mode)
-  (add-hook 'c-mode-common-hook (lambda ()
-                                  (setq adaptive-wrap-extra-indent 4)))
+(add-hook 'c-mode-common-hook 'visual-line-mode)
+(add-hook 'c-mode-common-hook 'adaptive-wrap-prefix-mode)
+(add-hook 'c-mode-common-hook (lambda ()
+                                (setq adaptive-wrap-extra-indent 4)))
 
-  (require 'flymake-config)
-  (add-hook 'c-mode-common-hook 'init-c-flymake)
+(require 'flymake-config)
+(add-hook 'c-mode-common-hook 'init-c-flymake)
 
-  ;; Set up autocomplete, but override default ac-cc-mode-setup.
-  (require 'autocomplete-config)
-  (defun ac-cc-mode-setup ())
+;; Set up autocomplete, but override default ac-cc-mode-setup.
+(require 'autocomplete-config)
+(defun ac-cc-mode-setup ())
 
-  (add-hook 'c-mode-common-hook 'init-c-autocomplete)
+(add-hook 'c-mode-common-hook 'init-c-autocomplete)
 
-  (require 'flyspell-config)
-  (add-hook 'c-mode-common-hook 'flyspell-prog-mode))
-
-(set-c-options)
+(require 'flyspell-config)
+(add-hook 'c-mode-common-hook 'flyspell-prog-mode)
 
 (provide 'c-config)
