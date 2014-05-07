@@ -18,6 +18,9 @@
                                                 t)
                              (re-search-forward "@\\<protocol\\>"
                                                 magic-mode-regexp-match-limit
+                                                t)
+                             (re-search-forward "@\\<class\\>"
+                                                magic-mode-regexp-match-limit
                                                 t))))
                  . objc-mode))
 
