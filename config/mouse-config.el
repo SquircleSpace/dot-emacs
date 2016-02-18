@@ -31,7 +31,8 @@
   (set-smooth-scroll))
 
 (defun set-window-system-mouse-options ()
-  (set-smooth-scroll))
+  (setq mouse-wheel-scroll-amount '(1))
+  (setq mouse-wheel-progressive-speed nil))
 
 (if (window-system)
     (set-window-system-mouse-options)
