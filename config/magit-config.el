@@ -1,5 +1,6 @@
 (require-package 'magit)
 (global-set-key (kbd "C-c s") 'magit-status)
+(global-set-key (kbd "C-c f") 'magit-file-popup)
 
 ;; If Emacs supports it, install magit-inotify
 (when (and (> emacs-major-version 24)
