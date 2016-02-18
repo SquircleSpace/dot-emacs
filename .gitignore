@@ -6,6 +6,7 @@ eshell
 .DS_Store
 url/cookies
 cache/docsets
+.mc-lists.el
 
 elpa
 *.elc
