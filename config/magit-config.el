@@ -7,4 +7,11 @@
   (require-package 'magit-inotify)
   (add-hook 'magit-mode-hook 'magit-inotify-mode))
 
+;; Not strictly magit, but useful and gitty
+
+(require-package 'git-gutter+)
+(require-package 'git-gutter-fringe+)
+(require 'git-gutter-fringe+)
+(global-git-gutter+-mode t)
+
 (provide 'magit-config)
