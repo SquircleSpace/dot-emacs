@@ -109,6 +109,8 @@ point reaches the beginning or end of the buffer, stop there."
     (when (= orig-point (point))
       (move-beginning-of-line 1))))
 
+(global-set-key [remap beginning-of-visual-line]
+                'prelude-move-beginning-of-line)
 (global-set-key [remap move-beginning-of-line]
                 'prelude-move-beginning-of-line)
 
