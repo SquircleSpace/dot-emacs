@@ -15,3 +15,7 @@
 (require 'ui-config)
 (require 'fringe-config)
 (require 'grep-config)
+
+;; Check if the extra elisp file exists
+(if (file-exists-p "~/.emacs.d/machine.el")
+    (load "~/.emacs.d/machine.el"))

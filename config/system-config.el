@@ -27,11 +27,7 @@
   (when (and (eq system-type 'darwin)
              window-system)
     ;; Enable menubar again (full screen button needs it?!?)
-    (menu-bar-mode 1))
-
-  ;; Check if the extra elisp file exists
-  (if (file-exists-p "~/.emacs.d/machine.el")
-      (load "~/.emacs.d/machine.el")))
+    (menu-bar-mode 1)))
 
 (add-hook 'after-init-hook 'set-machine-options-post-init)
 
