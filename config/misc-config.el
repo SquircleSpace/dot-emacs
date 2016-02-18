@@ -124,12 +124,6 @@ buffer is not visiting a file."
                          (ido-read-file-name "Find file(as root): ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
-;; Better isearch
-(require-package 'anzu)
-(require 'anzu)
-(diminish 'anzu-mode)
-(global-anzu-mode)
-
 ;; End Emacs prelude code
 
 (provide 'misc-config)
