@@ -14,3 +14,4 @@
 
 (require 'ui-config)
 (require 'fringe-config)
+(require 'grep-config)
