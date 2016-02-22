@@ -45,4 +45,31 @@
 ;; Overwrite selected text
 (delete-selection-mode 1)
 
+;; Highlight when jumping the cursor
+(require-package 'volatile-highlights)
+
+(defadvice pop-tag-mark (after highlight-line)
+  (save-excursion
+    (let ((line-start (progn (move-beginning-of-line 1) (point)))
+          (line-end (progn (move-end-of-line 1) (1+ (point)))))
+        (vhl/add-range line-start line-end))))
+
+(ad-activate 'pop-tag-mark)
+
+(defadvice recenter-top-bottom (after highlight-line)
+  (save-excursion
+    (let ((line-start (progn (move-beginning-of-line 1) (point)))
+          (line-end (progn (move-end-of-line 1) (1+ (point)))))
+        (vhl/add-range line-start line-end))))
+
+(ad-activate 'recenter-top-bottom)
+
+(defadvice pop-mark (after highlight-line)
+  (save-excursion
+    (let ((line-start (progn (move-beginning-of-line 1) (point)))
+          (line-end (progn (move-end-of-line 1) (1+ (point)))))
+        (vhl/add-range line-start line-end))))
+
+(ad-activate 'pop-mark)
+
 (provide 'ui-config)
