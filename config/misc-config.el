@@ -58,7 +58,7 @@
 
 ;; Easier window motion
 (require 'windmove)
-(windmove-default-keybindings 'meta)
+(windmove-default-keybindings (if (eq system-type 'darwin) 'super 'meta))
 
 ;; Highlight recent changes
 (require-package 'volatile-highlights)
