@@ -69,6 +69,9 @@
 (volatile-highlights-mode t)
 (diminish 'volatile-highlights-mode)
 
+;; Harrumph.  Stop dragging in files!
+(setq dired-dnd-protocol-alist nil)
+
 ;; note - this should be after volatile-highlights is required
 ;; add the ability to copy and cut the current line, without marking it
 (defadvice kill-ring-save (before smart-copy activate compile)
