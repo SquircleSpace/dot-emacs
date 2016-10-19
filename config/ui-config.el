@@ -64,12 +64,4 @@
 
 (ad-activate 'recenter-top-bottom)
 
-(defadvice pop-mark (after highlight-line)
-  (save-excursion
-    (let ((line-start (progn (move-beginning-of-line 1) (point)))
-          (line-end (progn (move-end-of-line 1) (1+ (point)))))
-        (vhl/add-range line-start line-end))))
-
-(ad-activate 'pop-mark)
-
 (provide 'ui-config)
