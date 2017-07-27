@@ -1,34 +1,35 @@
-;; Make ehsell have case insensitive tab complete
-(add-hook 'eshell-mode-hook
-          (lambda ()
-            (setq pcomplete-ignore-case t)))
+(defun readonlyify-comint-output (string)
+  ;; Need to inhibit read only to re-read-onlyify everything
+  (let ((inhibit-read-only t))
+    (add-text-properties (point-min) (point-max)
+                         '(read-only t front-sticky (read-only)))))
 
-;; Make shell output read only
-(add-hook
- 'comint-output-filter-functions
- (lambda (string)
-   ;; Need to inhibit read only to re-read-onlyify everything
-   (let ((inhibit-read-only t))
-     (add-text-properties (point-min) (point-max)
-                          '(read-only t front-sticky (read-only))))))
+(use-package comint
+  :config
+  (progn
+    ;; Make shell output read only
+    (add-hook 'comint-output-filter-functions
+              'readonlyify-comint-output)
 
-;; Use colors
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+    ;; Input always goes to the prompt
+    (setf comint-scroll-to-bottom-on-input 'this)
 
-;; Make shell mode use zsh
-(setq explicit-shell-file-name "/bin/zsh")
+    ;; Don't allow changing shell prompt
+    (setf comint-prompt-read-only t)))
 
-;; Assume shell echo commands you send them. Don't echo for them.
-(setq comint-process-echoes t)
+(use-package shell
+  :config
+  (progn
+    ;; Use colors
+    (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)))
 
-;; Don't allow changing shell prompt
-(setq comint-prompt-read-only t)
+(use-package eshell
+  :config
+  (progn
+    ;; Input always goes to the prompt
+    (setf eshell-scroll-to-bottom-on-input 'this)
 
-;; Input always goes to the prompt
-(setq comint-scroll-to-bottom-on-input 'this)
-(setq eshell-scroll-to-bottom-on-input 'this)
-
-;; No welcome message when launching eshell
-(setq eshell-banner-message "")
+    ;; No welcome message when launching eshell
+    (setq eshell-banner-message "")))
 
 (provide 'shell-config)

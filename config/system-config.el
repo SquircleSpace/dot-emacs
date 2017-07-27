@@ -13,22 +13,13 @@
   (global-set-key [(super q)] 'save-buffers-kill-terminal)
   (global-set-key [(super w)]
                   (lambda () (interactive) (delete-window)))
-  (global-set-key [(super z)] 'undo)
+  (global-set-key [(super z)] 'undo))
 
-  (when window-system
-    ;; We are running a guifull emacs! Fix our path.
-    (require-package 'exec-path-from-shell)
-    (let ((old-exec exec-path))
-      (exec-path-from-shell-initialize)
-      (setq exec-path (append exec-path old-exec)))))
-
-(defun set-machine-options-post-init ()
-  ;; OS-specific changes
-  (when (and (eq system-type 'darwin)
-             window-system)
-    ;; Enable menubar again (full screen button needs it?!?)
-    (menu-bar-mode 1)))
-
-(add-hook 'after-init-hook 'set-machine-options-post-init)
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns))
+  ;; We are running a guifull emacs! Fix our path.
+  :demand t
+  :config
+  (exec-path-from-shell-initialize))
 
 (provide 'system-config)

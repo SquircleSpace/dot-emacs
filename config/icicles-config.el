@@ -1,8 +1,8 @@
-(require-package 'icicles)
-(require-package 'fuzzy-match)
-
-(setq icicle-TAB-completion-methods '(fuzzy vanilla basic))
-
-(icy-mode)
+(use-package icicles
+  :demand t
+  :config
+  (progn
+    (setq icicle-TAB-completion-methods '(fuzzy vanilla basic))
+    (icy-mode 1)))
 
 (provide 'icicles-config)

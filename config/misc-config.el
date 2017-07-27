@@ -1,5 +1,4 @@
-(require-package 'diminish)
-(require 'diminish)
+(use-package diminish)
 
 ;; Inhibit the startup screen
 (setq inhibit-startup-screen t)
@@ -29,51 +28,50 @@
 (setq doc-view-continuous t)
 
 ;; Support unfill
-(require-package 'unfill)
+(use-package unfill)
 
 ;; Undo tree
-(require-package 'undo-tree)
-(require 'undo-tree)
-(global-undo-tree-mode)
-(diminish 'undo-tree-mode)
+(use-package undo-tree
+  :demand t
+  :config
+  (progn
+    (global-undo-tree-mode 1)
+    (diminish 'undo-tree-mode)))
 
-;; Begin code from Emacs Prelude
 ;; Smartparens
-(require-package 'smartparens)
-(require 'smartparens-config)
-(setq sp-base-key-bindings 'paredit)
-(setq sp-autoskip-closing-pair 'always)
-(setq sp-hybrid-kill-entire-symbol nil)
-(sp-use-paredit-bindings)
-(smartparens-global-mode +1)
-(show-smartparens-global-mode +1)
-(diminish 'smartparens-mode)
-
-;; Better filenames name collisions
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
-(setq uniquify-separator "/")
-(setq uniquify-after-kill-buffer-p t)
-(setq uniquify-ignore-buffers-re "^\\*")
+(use-package smartparens
+  :demand t
+  :config
+  (progn
+    (setf sp-autoskip-closing-pair t)
+    (sp-use-paredit-bindings)
+    (smartparens-global-mode 1)
+    (show-smartparens-global-mode 1)
+    (diminish 'smartparens-mode)))
 
 ;; Easier window motion
-(require 'windmove)
-(windmove-default-keybindings (if (eq system-type 'darwin) 'super 'meta))
-(require-package 'framemove)
-(require 'framemove)
-(setq framemove-hook-into-windmove t)
+(use-package windmove
+  :demand t
+  :config
+  (windmove-default-keybindings (if (eq system-type 'darwin) 'super 'meta)))
+(use-package framemove
+  :if window-system
+  :demand t
+  :config
+  (setf framemove-hook-into-windmove t))
 
 ;; Highlight recent changes
-(require-package 'volatile-highlights)
-(require 'volatile-highlights)
-(volatile-highlights-mode t)
-(diminish 'volatile-highlights-mode)
+(use-package volatile-highlights
+  :demand t
+  :config
+  (volatile-highlights-mode t)
+  :diminish volatile-highlights-mode)
 
 ;; Harrumph.  Stop dragging in files!
-(setq dired-dnd-protocol-alist nil)
+(setf dired-dnd-protocol-alist nil)
 
-;; note - this should be after volatile-highlights is required
-;; add the ability to copy and cut the current line, without marking it
+;; Begin code from Emacs Prelude
+;; Copy line
 (defadvice kill-ring-save (before smart-copy activate compile)
   "When called interactively with no active region, copy a single line instead."
   (interactive
@@ -82,6 +80,7 @@
      (list (line-beginning-position)
            (line-end-position)))))
 
+;; Cut line
 (defadvice kill-region (before smart-cut activate compile)
   "When called interactively with no active region, kill a single line instead."
   (interactive
@@ -89,9 +88,6 @@
      (list (line-beginning-position)
            (line-beginning-position 2)))))
 
-;; End code from Emacs Prelude
-
-;; Copied from the Emacs Prelude
 (defun prelude-move-beginning-of-line (arg)
   "Move point back to indentation of beginning of line.
 
@@ -131,7 +127,6 @@ buffer is not visiting a file."
       (find-file (concat "/sudo:root@localhost:"
                          (ido-read-file-name "Find file(as root): ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
-
 ;; End Emacs prelude code
 
 (provide 'misc-config)

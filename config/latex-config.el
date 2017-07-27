@@ -1,23 +1,26 @@
-(require-package 'auctex)
-(require-package 'adaptive-wrap)
+(use-package tex
+  :ensure auctex
+  :config
+  (progn
+    (setf LaTeX-command "pdflatex")
+    (add-hook 'LaTeX-mode-hook 'visual-line-mode)
+    (add-hook 'LaTeX-mode-hook 'adaptive-wrap-prefix-mode)))
 
-(setq LaTeX-command "pdflatex")
-
-(add-hook 'LaTeX-mode-hook 'visual-line-mode)
-(add-hook 'LaTeX-mode-hook 'adaptive-wrap-prefix-mode)
-
-(when (eq system-type 'darwin)
+(use-package tex
+  :if (eq system-type 'darwin)
+  :config
   ;; Make auctex do the right thing with open.
-  (setq TeX-view-program-list
-        (quote (("Open" "open %s.pdf"))))
-  (setq TeX-view-program-selection
-        (quote (
-                ((output-dvi style-pstricks) "dvips and gv")
-                (output-dvi "Open")
-                (output-pdf "Open")
-                (output-html "Open")))))
+  (setf TeX-view-program-list
+        '(("Open" "open %s.pdf")))
+  (setf TeX-view-program-selection
+        '(((output-dvi style-pstricks) "dvips and gv")
+          (output-dvi "Open")
+          (output-pdf "Open")
+          (output-html "Open"))))
 
-(require 'flyspell-config)
-(add-hook 'LaTeX-mode-hook 'flyspell-mode)
+(use-package flyspell-config
+  :after tex
+  :config
+  (add-hook 'LaTeX-mode-hook 'flyspell-mode))
 
 (provide 'latex-config)

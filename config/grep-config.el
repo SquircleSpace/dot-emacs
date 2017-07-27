@@ -22,6 +22,6 @@
                               grep-find-template)))
     (rgrep regexp files dir confirm)))
 
-(global-set-key (kbd "C-'") 'rgrep-fast)
+(global-set-key (kbd "M-]") 'rgrep-fast)
 
 (provide 'grep-config)

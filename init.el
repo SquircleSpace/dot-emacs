@@ -1,4 +1,6 @@
-(when (< emacs-major-version 24)
+(package-initialize)
+
+(when (< emacs-major-version 25)
   (error "This version of emacs is as old as dirt."))
 
 (add-to-list 'load-path "~/.emacs.d/config/")
@@ -19,3 +21,5 @@
 ;; Check if the extra elisp file exists
 (if (file-exists-p "~/.emacs.d/machine.el")
     (load "~/.emacs.d/machine.el"))
+(if (file-exists-p "~/.emacs.d/config/machine-config.el")
+    (require 'machine-config))

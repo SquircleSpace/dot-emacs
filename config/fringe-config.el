@@ -1,4 +1,4 @@
-(defun set-fringe-options ()
+(when window-system
   ;; Get a very small right fringe
   (set-fringe-mode '(5 . 5))
   ;; Put useful things in it
@@ -6,9 +6,6 @@
   (setq-default indicate-empty-lines t)
   (setq flymake-fringe-indicator-position 'left-fringe)
   (setq visual-line-fringe-indicators '(nil right-curly-arrow))
-  ;; We don't need to indicate empty lines in whitespace mode anymore
-  (eval-after-load 'whitespace-config
-    '(setq whitespace-style (delete 'empty whitespace-style)))
 
   ;; By default, scrolling in fringes and margins is unbound. This is
   ;; silly. Make it do the sane thing and scroll like normal. Be
@@ -32,11 +29,6 @@
                          (call-interactively (global-key-binding
                                               ,(kbd wheel-str))
                                              nil [event]))))
-          (global-set-key from-kbd (eval to-fn))))))
-  )
-
-;; Can't set fringe options without a window system
-(when window-system
-  (set-fringe-options))
+          (global-set-key from-kbd (eval to-fn)))))))
 
 (provide 'fringe-config)
