@@ -11,8 +11,11 @@
             (java-mode . "java")
             (awk-mode . "awk")
             (other . "gnu"))))
-    (nconc (cadr (assoc "\\.h\\'" cc-other-file-alist)) '(".mm"))
-    (add-to-list 'cc-other-file-alist '("\\.mm\\'" (".h")))))
+    (use-package find-file
+      :config
+      (progn
+        (nconc (cadr (assoc "\\.h\\'" cc-other-file-alist)) '(".mm"))
+        (add-to-list 'cc-other-file-alist '("\\.mm\\'" (".h")))))))
 
 (use-package flyspell-config
   :ensure nil
