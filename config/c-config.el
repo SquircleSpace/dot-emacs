@@ -1,13 +1,17 @@
 (use-package cc-mode
-  :no-require t
-  :after
-  (setq c-default-style
-        (quote
-         ((c-mode . "stroustrup")
-          (c++-mode . "stroustrup")
-          (java-mode . "java")
-          (awk-mode . "awk")
-          (other . "gnu")))))
+  :magic (((rx (sequence line-start "#include <" (+ alpha) ">" line-end)) . c++-mode)
+          ((rx (sequence line-start "#import <Foundation/Foundation.h>")) . objc-mode))
+  :config
+  (progn
+    (setq c-default-style
+          (quote
+           ((c-mode . "stroustrup")
+            (c++-mode . "stroustrup")
+            (java-mode . "java")
+            (awk-mode . "awk")
+            (other . "gnu"))))
+    (nconc (cadr (assoc "\\.h\\'" cc-other-file-alist)) '(".mm"))
+    (add-to-list 'cc-other-file-alist '("\\.mm\\'" (".h")))))
 
 (use-package flyspell-config
   :no-require t
