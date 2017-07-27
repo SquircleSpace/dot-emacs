@@ -1,5 +1,5 @@
 (use-package flyspell
-  :no-require t
+  :ensure nil
   :init
   ;; Start up flyspell mode when it makes sense
   (add-hook 'text-mode-hook 'flyspell-mode)

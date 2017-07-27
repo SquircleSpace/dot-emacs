@@ -7,6 +7,7 @@
     (add-hook 'LaTeX-mode-hook 'adaptive-wrap-prefix-mode)))
 
 (use-package tex
+  :ensure nil
   :if (eq system-type 'darwin)
   :config
   ;; Make auctex do the right thing with open.
@@ -19,6 +20,7 @@
           (output-html "Open"))))
 
 (use-package flyspell-config
+  :ensure nil
   :after tex
   :config
   (add-hook 'LaTeX-mode-hook 'flyspell-mode))

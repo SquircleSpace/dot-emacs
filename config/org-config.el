@@ -1,4 +1,5 @@
-(use-package flyspell-config)
+(use-package flyspell-config
+  :ensure nil)
 
 (use-package org
   :mode (("\\.org$" . org-mode))

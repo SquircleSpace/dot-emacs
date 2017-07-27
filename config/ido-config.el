@@ -3,6 +3,7 @@
 (use-package ido-yes-or-no)
 
 (use-package ido
+  :ensure nil
   :demand t
   :config
   (progn

@@ -1,4 +1,5 @@
 (use-package whitespace
+  :ensure nil
   :config
   (progn
     (setf whitespace-style

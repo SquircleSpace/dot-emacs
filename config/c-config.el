@@ -1,4 +1,5 @@
 (use-package cc-mode
+  :ensure nil
   :magic (((rx (sequence line-start "#include <" (+ alpha) ">" line-end)) . c++-mode)
           ((rx (sequence line-start "#import <Foundation/Foundation.h>")) . objc-mode))
   :config
@@ -14,7 +15,7 @@
     (add-to-list 'cc-other-file-alist '("\\.mm\\'" (".h")))))
 
 (use-package flyspell-config
-  :no-require t
+  :ensure nil
   :after cc-mode
   :config
   (add-hook 'c-mode-common-hook 'flyspell-prog-mode))

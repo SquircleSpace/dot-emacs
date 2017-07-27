@@ -5,6 +5,7 @@
                          '(read-only t front-sticky (read-only)))))
 
 (use-package comint
+  :ensure nil
   :config
   (progn
     ;; Make shell output read only
@@ -18,12 +19,14 @@
     (setf comint-prompt-read-only t)))
 
 (use-package shell
+  :ensure nil
   :config
   (progn
     ;; Use colors
     (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)))
 
 (use-package eshell
+  :ensure nil
   :config
   (progn
     ;; Input always goes to the prompt

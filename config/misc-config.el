@@ -51,6 +51,7 @@
 
 ;; Easier window motion
 (use-package windmove
+  :ensure nil
   :demand t
   :config
   (windmove-default-keybindings (if (eq system-type 'darwin) 'super 'meta)))

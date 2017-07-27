@@ -6,8 +6,8 @@
     (add-hook 'haskell-mode-hook 'imenu-add-menubar-index)))
 
 (use-package flyspell-config
+  :ensure nil
   :after haskell-mode
-  :no-require t
   :config (add-hook 'haskell-mode-hook 'flyspell-prog-mode))
 
 (provide 'haskell-config)
