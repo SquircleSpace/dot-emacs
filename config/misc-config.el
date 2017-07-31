@@ -71,6 +71,11 @@
 ;; Harrumph.  Stop dragging in files!
 (setf dired-dnd-protocol-alist nil)
 
+;; Enable commands that aren't confusing
+(put 'narrow-to-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
 ;; Begin code from Emacs Prelude
 ;; Copy line
 (defadvice kill-ring-save (before smart-copy activate compile)
