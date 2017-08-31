@@ -135,4 +135,7 @@ buffer is not visiting a file."
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 ;; End Emacs prelude code
 
+(use-package define-word
+  :bind (("M-#" . define-word-at-point)))
+
 (provide 'misc-config)
