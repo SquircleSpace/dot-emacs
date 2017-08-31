@@ -47,6 +47,7 @@
     (sp-use-paredit-bindings)
     (smartparens-global-mode 1)
     (show-smartparens-global-mode 1)
+    (setf sp-highlight-pair-overlay nil)
     (diminish 'smartparens-mode)))
 
 ;; Easier window motion
