@@ -139,4 +139,9 @@ buffer is not visiting a file."
 (use-package define-word
   :bind (("M-#" . define-word-at-point)))
 
+;; Sometimes I don't want to keep changes!
+(add-to-list 'save-some-buffers-action-alist
+             `(?\C-d ,(lambda (buffer) (with-current-buffer buffer (revert-buffer t t t)))
+                     ,(purecopy "discard changes")))
+
 (provide 'misc-config)
